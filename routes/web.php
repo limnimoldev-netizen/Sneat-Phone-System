@@ -22,7 +22,7 @@ use App\Http\Controllers\StorageController;
 use App\Http\Controllers\ColorController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\NetworkController;
-use App\Http\Controllers\GurantorController;                    
+use App\Http\Controllers\GurantorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -62,8 +62,8 @@ Route::group([
       Route::get('/product/pdf', [ReportController::class, 'productPdf'])->name('product.pdf');
       Route::get('/loan/list-loan', [ReportController::class, 'listLoan'])->name('loan.list-loan');
     });
-    Route::get('roles', [RoleController::class, 'index'])->name('roles.index');
-    Route::get('products', [ProductController::class, 'index'])->name('products.index');
+    Route::resource('roles', RoleController::class);
+    Route::resource('products', ProductController::class);
     Route::group(['prefix'=>'user','as'=>'users.'], function(){
         Route::get('/', [EmployeeController::class, 'index'])->name('index');
         Route::get('/edit/{id}', [EmployeeController::class, 'edit'])->name('edit');

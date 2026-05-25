@@ -149,7 +149,7 @@
 
                 // Make an AJAX request to check for uniqueness
                 $.ajax({
-                    url: '{{ route("brand.update", withLang()) }}',
+                    url: '{{ route('brand.update', withLang()) }}',
                     method: 'POST',
                     data: { name: name, id: id },
                     headers: {
