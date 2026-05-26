@@ -62,8 +62,22 @@ Route::group([
       Route::get('/product/pdf', [ReportController::class, 'productPdf'])->name('product.pdf');
       Route::get('/loan/list-loan', [ReportController::class, 'listLoan'])->name('loan.list-loan');
     });
+
+
+    //Product Route
+
+    // Route::resource('products', ProductController::class);
+    Route::group(['prefix' => 'products' , 'as'=>'products.'], function() {
+        Route::get('/', [ProductController::class, 'index'])->name('index');
+        Route::get('/create', [ProductController::class, 'index'])->name('create');
+        Route::get('/edit/{id}', [ProductController::class, 'edit'])->name('edit');
+        Route::post('/update/{id}', [ProductController::class, 'update'])->name('update');
+        Route::delete('/destoy/{id}',[ProductController::class, 'destroy'])->name('destroy');
+
+    });
+    
     Route::resource('roles', RoleController::class);
-    Route::resource('products', ProductController::class);
+    
     Route::group(['prefix'=>'user','as'=>'users.'], function(){
         Route::get('/', [EmployeeController::class, 'index'])->name('index');
         Route::get('/edit/{id}', [EmployeeController::class, 'edit'])->name('edit');
