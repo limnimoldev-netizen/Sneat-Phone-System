@@ -67,7 +67,7 @@ Route::group([
     //Product Route
 
     // Route::resource('products', ProductController::class);
-    Route::group(['prefix' => 'products' , 'as'=>'products.'], function() {
+    Route::group(['prefix' => 'product' , 'as'=>'products.'], function() {
         Route::get('/', [ProductController::class, 'index'])->name('index');
         Route::get('/create', [ProductController::class, 'index'])->name('create');
         Route::get('/edit/{id}', [ProductController::class, 'edit'])->name('edit');
