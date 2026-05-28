@@ -1,11 +1,11 @@
 <!-- Menu -->
 <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
-    <div class="app-brand custom">
+    <div class="app-brand custom ">
         <a href="{{ route('home') }}" class="app-brand-link">
             <span class="app-brand-logo custom">
-                <img src="{{ $company->image_logo }}" alt="logo" width="50px"/>
+                <img src="/assets/img/favicon/favicon.ico" alt="logo" width="50px"/>
             </span>
-            <span class="app-brand-text custom menu-text fw-bolder ms-2">{{ $company->name ?? ''}}</span>
+            <span class="app-brand-text custom menu-text fw-bolder ms-2">{{ $company->name ?? 'Sneat Phone Shop'}}</span>
         </a>
         <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
             <i class="bx bx-chevron-left bx-sm align-middle"></i>
