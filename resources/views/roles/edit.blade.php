@@ -16,7 +16,7 @@
         <h5 class="card-header">Edit Role — <strong>{{ $role->name }}</strong></h5>
         <div class="card-body">
             {!! Form::model($role, [
-                'method' => 'PATCH',
+                'method' => 'PUT',
                 'route'  => ['roles.update', withLang(['id' => $role->id])]
             ]) !!}
 
