@@ -33,17 +33,17 @@
                             <td><strong>{{ $role->name }}</strong></td>
                             <td>
                                 @can('role-list')
-                                  <a href="{{ route('roles.show', withLang(['role' => $role->id])) }}" class="btn btn-icon btn-outline-secondary">
+                                  <a href="{{ route('roles.show', withLang(['id' => $role->id])) }}" class="btn btn-icon btn-outline-secondary">
                                     <i class='bx bxs-spreadsheet'></i>
                                   </a>
                                 @endcan
                                 @can('role-edit')
-                                  <a href="{{ route('roles.edit', withLang(['role' => $role->id])) }}" class="btn btn-icon btn-outline-secondary">
+                                  <a href="{{ route('roles.edit', withLang(['id' => $role->id])) }}" class="btn btn-icon btn-outline-secondary">
                                       <span class="tf-icons bx bx-edit-alt"></span>
                                   </a>
                                 @endcan
                                 @can('role-delete')
-                                {!! Form::open(['method' => 'DELETE','route' => ['roles.destroy', withLang(['role' => $role->id])],'style'=>'display:inline']) !!}
+                                {!! Form::open(['method' => 'DELETE','route' => ['roles.destroy', withLang(['id' => $role->id])],'style'=>'display:inline']) !!}
                                     {!! Form::submit('Delete', ['class' => 'btn btn-danger d-none submit-delete']) !!}
                                     {{-- <a id="btn-delete" class="dropdown-item" href="javascript:submitForm()"><i class="bx bx-trash me-1"></i> Delete</a> --}}
                                     <button type="submit" class="btn btn-icon btn-outline-danger" onclick="return confirm('Are you sure you want to delete this expense?')">
