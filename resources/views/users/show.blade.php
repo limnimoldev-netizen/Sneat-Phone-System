@@ -30,14 +30,13 @@
                         <!-- Account -->
                         <div class="card-body">
                             <div class="d-flex align-items-start align-items-sm-center gap-4">
+
+                        // place that i fix
+                            
+                            @php $fallback = asset('assets/img/blank-profile.png') @endphp
                             <img
                                 src="{{ $user->getProfile() }}"
-                                alt="user-avatar"
-                                class="d-block rounded"
-                                height="100"
-                                width="100"
-                                id="uploadedAvatar"
-                                onError="this.onerror=null;this.src='{{ asset('/assets/img/blank-profile.png') }}';"
+                                onError="this.onerror=null;this.src='{{ $fallback }}';"
                             />
 
                             <div class="button-wrapper">
