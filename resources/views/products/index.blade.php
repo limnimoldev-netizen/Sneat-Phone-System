@@ -168,7 +168,7 @@
                                         <button type="submit" class="btn btn-icon btn-outline-danger" onclick="return confirm('Are you sure you want to delete this product?')">
                                             <span class="tf-icons bx bx-trash"></span>
                                         </button>
-                                    </form>List of ProductsList of ProductsList of Products
+                                    </form>
 
                               </td>
                           </tr>
