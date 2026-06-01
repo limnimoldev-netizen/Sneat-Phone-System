@@ -112,30 +112,35 @@ Route::group([
         Route::get('/create', [ModelTypeController::class, 'create'])->name('create');
         Route::post('/store', [ModelTypeController::class, 'store'])->name('store');
         Route::post('/update', [ModelTypeController::class, 'update'])->name('update');
+        Route::delete('/destroy/{id}', [ModelTypeController::class, 'destroy'])->name('destroy');
     });
     Route::group(['prefix'=>'network','as'=>'network.'], function(){
       Route::get('/', [NetworkController::class, 'index'])->name('index');
       Route::get('/create', [NetworkController::class, 'create'])->name('create');
       Route::post('/store', [NetworkController::class, 'store'])->name('store');
       Route::post('/update', [NetworkController::class, 'update'])->name('update');
+      Route::delete('/destroy/{id}', [NetworkController::class, 'destroy'])->name('destroy');
     });
     Route::group(['prefix'=>'serial','as'=>'serial.'], function(){
         Route::get('/', [SerialController::class, 'index'])->name('index');
         Route::get('/create', [SerialController::class, 'create'])->name('create');
         Route::post('/store', [SerialController::class, 'store'])->name('store');
         Route::post('/update', [SerialController::class, 'update'])->name('update');
+        Route::delete('/destroy/{id}', [SerialController::class, 'destroy'])->name('destroy');
     });
     Route::group(['prefix'=>'brand', 'as'=>'brand.'], function(){
         Route::get('/', [BrandController::class, 'index'])->name('index');
         Route::get('/create', [BrandController::class, 'create'])->name('create');
         Route::post('/store', [BrandController::class, 'store'])->name('store');
         Route::post('/update', [BrandController::class, 'update'])->name('update');
+        Route::delete('/destroy/{id}', [BrandController::class, 'destroy'])->name('destroy');
     });
     Route::group(['prefix'=>'color', 'as'=>'color.'], function(){
         Route::get('/', [ColorController::class, 'index'])->name('index');
         Route::get('/create', [ColorController::class, 'create'])->name('create');
         Route::post('/store', [ColorController::class, 'store'])->name('store');
         Route::post('/update', [ColorController::class, 'update'])->name('update');
+        Route::delete('/destroy/{id}', [ColorController::class, 'destroy'])->name('destroy');
     });
     Route::group(['prefix'=>'storage', 'as'=>'storage.'], function(){
         Route::get('/', [StorageController::class, 'index'])->name('index');

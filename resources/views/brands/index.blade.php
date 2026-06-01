@@ -39,6 +39,14 @@
                             <a href="#" class="btn btn-icon btn-outline-secondary edit-model-type" data-bs-toggle="modal" data-bs-target="#editModelType" data-id="{{ $brand->id }}" data-value="{{ $brand->name }}">
                                 <span class="tf-icons bx bx-edit-alt"></span>
                             </a>
+                            <form action="{{ route('brand.destroy', withLang(['id' => $brand->id])) }}" method="POST"  class="d-inline">
+                                    @csrf
+                                    @method('DELETE')
+
+                                    <button type="submit" class="btn btn-icon btn-outline-secondary" >
+                                        <span class="tf-icons bx bx-trash"></span>
+                                    </button>
+                            </form>
                         </td>
                     </tr>
                     @endforeach

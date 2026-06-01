@@ -43,6 +43,14 @@
                             <a href="#" class="btn btn-icon btn-outline-secondary edit-model-type" data-bs-toggle="modal" data-bs-target="#editModelType" data-id="{{ $network->id }}" data-value="{{ $network->name }}">
                                 <span class="tf-icons bx bx-edit-alt"></span>
                             </a>
+                            <form action="{{ route('network.destroy', withLang(['id' => $network->id])) }}" method="POST"  class="d-inline">
+                                    @csrf
+                                    @method('DELETE')
+
+                                    <button type="submit" class="btn btn-icon btn-outline-secondary" >
+                                        <span class="tf-icons bx bx-trash"></span>
+                                    </button>
+                            </form>
                         </td>
                     </tr>
                     @endforeach
@@ -143,7 +151,7 @@
 
                 // Make an AJAX request to check for uniqueness
                 $.ajax({
-                    url: '{{ route('network.update', withLang()) }}',
+                    url: "{{ route('network.update', withLang()) }}",
                     method: 'POST',
                     data: { name: name, id: id },
                     headers: {

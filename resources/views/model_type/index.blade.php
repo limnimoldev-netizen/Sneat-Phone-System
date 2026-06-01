@@ -44,6 +44,14 @@
                             <a href="#" class="btn btn-icon btn-outline-secondary edit-model-type" data-bs-toggle="modal" data-bs-target="#editModelType" data-id="{{ $model_type->id }}" data-value="{{ $model_type->name }}">
                                 <span class="tf-icons bx bx-edit-alt"></span>
                             </a>
+                            <form action="{{ route('model_type.destroy', withLang(['id' => $model_type->id])) }}" method="POST"  class="d-inline">
+                                    @csrf
+                                    @method('DELETE')
+
+                                    <button type="submit" class="btn btn-icon btn-outline-secondary" >
+                                        <span class="tf-icons bx bx-trash"></span>
+                                    </button>
+                            </form>
                         </td>
                     </tr>
                     @endforeach
@@ -154,7 +162,7 @@
 
                 // Make an AJAX request to check for uniqueness
                 $.ajax({
-                    url: '{{ route('model_type.update', withLang()) }}',
+                    url: "{{ route('model_type.update', withLang()) }}",
                     method: 'POST',
                     data: { name: name, id: id },
                     headers: {
@@ -190,6 +198,6 @@
         function submitForm(){
             $('.submit-delete').click();
         }
-
+        
     </script>
 @endpush
