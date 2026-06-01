@@ -108,11 +108,11 @@ Route::group([
     });
     
     Route::group(['prefix'=>'order','as'=>'orders.'], function(){
-      Route::get('/create', [OrderController::class, 'index'])->name('create');
+      Route::get('/create', [OrderController::class, 'create'])->name('create');
       Route::get('/', [OrderController::class, 'index'])->name('index');
     });
     Route::group(['prefix'=>'sale','as'=>'sales.'], function(){
-      Route::get('/create', [OrderController::class, 'index'])->name('create');
+      Route::get('/create', [OrderController::class, 'create'])->name('create');
       Route::get('/', [OrderController::class, 'index'])->name('index');
      
     });
