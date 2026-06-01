@@ -14,13 +14,14 @@ class CompanySettingTableSeeder extends Seeder
     public function run(): void
     {
       CompanySetting::create([
-        'name' => 'CMy Phone Shop',
+        'name' => 'Sneat Phone System',
         'detail' => 'មានលក់ទូរស័ព្ទ',
-        'logo' => '',
+        'logo' => 'assets/img/favicon/favicon.ico',
         'interest' => '3',
         'phone' => '011 699 952',
         'address' => '#44 PSE Cambodia',
         'default_invoice_note' => 'សូមពិនិត្យទំនិញអោយបានត្រឹមត្រូវមុននឹង​ ចាកចេញទំនិញទិញហើយមិនអាចប្តូរវិញបានទេ'
     ]);
+
     }
 }
