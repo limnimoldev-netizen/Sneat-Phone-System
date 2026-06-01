@@ -12,7 +12,7 @@ if (!function_exists('setToStringDolla')) {
   function setToStringDolla($value = '')
   {
       // return '$'.number_format($value, 0, '.', ',');
-      return '$'.number_format(round($value, 2), 2);
+      return '$' . number_format(round((float)$value, 2), 2);
   }
 }
 
