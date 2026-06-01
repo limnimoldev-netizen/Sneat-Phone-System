@@ -44,6 +44,8 @@
                             <a href="#" class="btn btn-icon btn-outline-secondary edit-model-type" data-bs-toggle="modal" data-bs-target="#editModelType" data-id="{{ $model_type->id }}" data-value="{{ $model_type->name }}">
                                 <span class="tf-icons bx bx-edit-alt"></span>
                             </a>
+
+                            <!-- this button delete -->
                             <form action="{{ route('model_type.destroy', withLang(['id' => $model_type->id])) }}" method="POST"  class="d-inline">
                                     @csrf
                                     @method('DELETE')
