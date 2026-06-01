@@ -44,7 +44,7 @@
                             <a href="#" class="btn btn-icon btn-outline-secondary edit-storages" data-bs-toggle="modal" data-bs-target="#editstorages" data-id="{{ $storage->id }}" data-value="{{ $storage->name }}">
                                 <span class="tf-icons bx bx-edit-alt"></span>
                             </a>
-                            
+
                         </td>
                     </tr>
                     @endforeach
