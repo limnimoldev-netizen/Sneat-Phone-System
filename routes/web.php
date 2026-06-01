@@ -51,7 +51,7 @@ Route::group([
       Route::get('/stock/pdf', [ReportController::class, 'stockPdf'])->name('stock.pdf');
       Route::get('/expense', [ReportController::class, 'expense'])->name('expense');
       Route::get('/expense/pdf', [ReportController::class, 'expensePdf'])->name('expense.pdf');
-      Route::get('/sale', [ReportController::class, 'sale'])->name('sale');
+      Route::get('/sale', [ReportController::class, 'sale'])->name('sale'); 
       Route::get('/sale/pdf', [ReportController::class, 'salePdf'])->name('sale.pdf');
       Route::get('/loan', [ReportController::class, 'loan'])->name('loan');
       Route::get('/loan/pdf', [ReportController::class, 'loanPdf'])->name('loan.pdf');
@@ -62,6 +62,7 @@ Route::group([
       Route::get('/product/pdf', [ReportController::class, 'productPdf'])->name('product.pdf');
       Route::get('/loan/list-loan', [ReportController::class, 'listLoan'])->name('loan.list-loan');
     });
+
 
 
     // Rewrite Route resource to method in group
@@ -93,6 +94,7 @@ Route::group([
     });
     
     
+
 
     Route::group(['prefix'=>'user','as'=>'users.'], function(){
         Route::get('/', [EmployeeController::class, 'index'])->name('index');
