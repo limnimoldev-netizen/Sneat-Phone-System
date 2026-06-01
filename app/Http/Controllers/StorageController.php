@@ -70,23 +70,31 @@ class StorageController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Storage $storage)
-    {
-        //
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:25|unique:storages,name',
-        ]);
-        $storage = new storage();
-        $storage->name = $request->name;
-        $storage->save();
-        return redirect()->route('storage.index', withLang());
-    }
+   public function update(Request $request)
+{
+    $validatedData = $request->validate([
+        'name' => 'required|string|max:25',
+    ]);
+
+    $storage = Storage::findOrFail($request->id);
+
+    $storage->name = $request->name;
+    $storage->save();
+
+    return redirect()->route('storage.index', withLang());
+}
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Storage $storage)
+    public function destroy($lang, $id)
     {
-        //
+        $storage = Storage::find($id);
+
+        if ($storage) {
+            $storage->delete();
+        }
+
+        return redirect()->back();
     }
 }
