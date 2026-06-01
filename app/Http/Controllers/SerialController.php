@@ -97,8 +97,14 @@ class SerialController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Series $serial)
+    public function destroy($lang, $id)
     {
-        //
+        $serial = Series::find($id);
+
+        if ($serial) {
+            $serial->delete();
+        }
+
+        return redirect()->back();
     }
 }

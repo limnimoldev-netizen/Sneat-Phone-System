@@ -44,6 +44,14 @@
                             <a href="#" class="btn btn-icon btn-outline-secondary edit-series" data-bs-toggle="modal" data-bs-target="#editSeries" data-id="{{ $serial->id }}" data-value="{{ $serial->name }}">
                                 <span class="tf-icons bx bx-edit-alt"></span>
                             </a>
+                            <form action="{{ route('serial.destroy', withLang(['id' => $serial->id])) }}" method="POST"  class="d-inline">
+                                    @csrf
+                                    @method('DELETE')
+
+                                    <button type="submit" class="btn btn-icon btn-outline-secondary" >
+                                        <span class="tf-icons bx bx-trash"></span>
+                                    </button>
+                            </form>
                         </td>
                     </tr>
                     @endforeach
@@ -171,7 +179,7 @@
 
                 // Make an AJAX request to check for uniqueness
                 $.ajax({
-                    url: '{{ route('serial.update', withLang()) }}',
+                    url: "{{ route('serial.update', withLang()) }}",
                     method: 'POST',
                     data: { name: name, id: id },
                     headers: {

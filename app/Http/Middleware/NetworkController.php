@@ -88,8 +88,14 @@ class NetworkController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Network $network)
+    public function destroy($lang, $id)
     {
-        //
+        $network = Network::find($id);
+
+        if ($network) {
+            $network->delete();
+        }
+
+        return redirect()->back();
     }
 }
