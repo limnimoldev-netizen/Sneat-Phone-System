@@ -45,10 +45,18 @@
                             <a href="#" class="btn btn-icon btn-outline-secondary edit-model-type" data-bs-toggle="modal" data-bs-target="#editModelType" data-id="{{ $color->id }}" data-value="{{ $color->name }}">
                                 <span class="tf-icons bx bx-edit-alt"></span>
                             </a>
+                            <form action="{{ route('color.destroy', withLang(['id' => $color->id])) }}" method="POST"  class="d-inline">
+                                    @csrf
+                                    @method('DELETE')
+
+                                    <button type="submit" class="btn btn-icon btn-outline-secondary" >
+                                        <span class="tf-icons bx bx-trash"></span>
+                                    </button>
+                            </form>
                         </td>
                     </tr>
                     @endforeach
-                </tbody>
+                </tbody> 
             </table>
         </div>
     </div>
@@ -72,7 +80,7 @@
                                                 <input type="text" id="name" name="name" class="form-control" placeholder="Ex: Blue, Black, Red">
                                             </div>
                                         </div>
-                                        <!-- <div class="row g-2">
+                                        <div class="row g-2">
                                             <div class="col mb-0">
                                                 <label for="emailBasic" class="form-label">Email</label>
                                                 <input type="text" id="emailBasic" class="form-control" placeholder="xxxx@xxx.xx">
@@ -81,7 +89,7 @@
                                                 <label for="dobBasic" class="form-label">DOB</label>
                                                 <input type="text" id="dobBasic" class="form-control" placeholder="DD / MM / YY">
                                             </div>
-                                        </div> -->
+                                        </div>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">{{__('button.close')}}</button>
@@ -154,7 +162,7 @@
 
                 // Make an AJAX request to check for uniqueness
                 $.ajax({
-                    url: '{{ route('color.update', withLang()) }}',
+                    url: "{{ route('color.update', withLang()) }}",
                     method: 'POST',
                     data: { name: name, id: id },
                     headers: {

@@ -4,7 +4,7 @@ use Carbon\Carbon;
 if (!function_exists('withLang')) {
     function withLang($array = [])
     {
-        return array_merge($array, ['lang' => app()->getLocale()]);
+        return array_merge($array, ['lang' => app()->getLocale()]); 
     }
 }
 
