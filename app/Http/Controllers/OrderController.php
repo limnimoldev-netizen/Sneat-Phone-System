@@ -32,7 +32,9 @@ class OrderController extends Controller
    */
   public function index(Request $request)
   {
-    
+    // code add
+    $query = Order::query();  
+
     $parameterNames = [];
     if ($request->search) {
         $filters = $request->only(['customer', 'from_date', 'to_date']);
@@ -60,6 +62,10 @@ class OrderController extends Controller
 
     $orders = $query->orderBy('order_date', 'desc')->paginate(20);
     session(['printInvoiceId' => null]);
+
+    // code add
+    $customers = Customer::pluck('name', 'id');
+    
     return view('orders.index', compact(
       'orders',
       'customers',

@@ -91,8 +91,14 @@ class ColorController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Color $color)
+    public function destroy($lang, $id)
     {
-        //
+        $color = Color::find($id);
+
+        if ($color) {
+            $color->delete();
+        }
+
+        return redirect()->back();
     }
 }
