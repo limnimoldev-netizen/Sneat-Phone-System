@@ -143,6 +143,8 @@ Route::group([
         Route::post('/store', [StorageController::class, 'store'])->name('store');
         Route::post('/update', [StorageController::class, 'update'])->name('update');
     });
+
+    //testing
     Route::group(['prefix'=>'loan','as'=>'loans.'], function(){
       Route::get('/', [LoanController::class, 'index'])->name('index');
       Route::get('/create', [LoanController::class, 'create'])->name('create');
