@@ -18,17 +18,15 @@
                             <div class="mb-3 col-md-12">
                                 <div class="d-flex align-items-center gap-3">
                                     <div class="position-relative">
-                                        <img src="{{ asset('img/placeholder.png') }}" alt="Product" class="rounded" width="100" height="100" style="object-fit: cover;">
-                                        <div class="position-absolute bottom-0 end-0">
-                                            <span class="badge bg-primary rounded-circle p-2">
-                                                <i class="bx bx-camera text-white"></i>
-                                            </span>
-                                        </div>
+                                        
+
+                                        <img src="{{ $company->image_logo ?? 'img.png' }}" alt="Product" class="rounded" width="100" height="100" style="object-fit: cover;">
+                                        
                                     </div>
                                     <div>
                                         <input type="file" id="image" name="image" class="form-control d-none" accept="image/*">
-                                        <button type="button" class="btn btn-primary btn-sm" onclick="document.getElementById('image').click()">Upload new photo</button>
-                                        <button type="button" class="btn btn-outline-secondary btn-sm">Reset</button>
+                                        <button type="button" class="btn btn-primary btn-base" onclick="document.getElementById('image').click()">Upload new photo</button>
+                                        <button type="button" class="btn btn-outline-secondary btn-base">Reset</button>
                                         <p class="text-muted mb-0 mt-2">Allowed JPG, GIF or PNG.</p>
                                     </div>
                                 </div>
@@ -201,7 +199,7 @@
                             <div class="mb-3 col-md-6">
                                 <label class="form-label" for="battery_percentage">Battery Percentage</label>
                                 <div class="input-group input-group-merge">
-                                    <input class="form-control @error('battery_percentage') is-invalid @enderror" type="number" id="battery_percentage" name="battery_percentage" min="0" max="100">
+                                    <input class="form-control @error('battery_percentage') is-invalid @enderror" id="battery_percentage" name="battery_percentage" min="0" max="100">
                                     <span class="input-group-text">%</span>
                                     @error('battery_percentage')
                                         <span class="invalid-feedback" role="alert">
@@ -214,7 +212,7 @@
                             <div class="mb-3 col-md-6">
                                 <label class="form-label" for="percentage">Product Percentage</label>
                                 <div class="input-group input-group-merge">
-                                    <input class="form-control @error('percentage') is-invalid @enderror" type="number"  id="percentage" name="percentage" min="0" max="100">
+                                    <input class="form-control @error('percentage') is-invalid @enderror"  id="percentage" name="percentage" >
                                     <span class="input-group-text">%</span>
                                     @error('percentage')
                                         <span class="invalid-feedback" role="alert">
@@ -227,7 +225,7 @@
                             <div class="mb-3 col-md-6">
                                 <label class="form-label" for="purchase_price">Purchase Price</label>
                                 <div class="input-group input-group-merge">
-                                    <input class="form-control @error('purchase_price') is-invalid @enderror" type="number"  id="purchase_price" name="purchase_price" step="0.01" min="0">
+                                    <input class="form-control @error('purchase_price') is-invalid @enderror"  id="purchase_price" name="purchase_price" step="0.01" min="0">
                                     <span class="input-group-text">$</span>
                                     @error('purchase_price')
                                         <span class="invalid-feedback" role="alert">
@@ -251,7 +249,7 @@
                             <div class="mb-3 col-md-6">
                                 <label class="form-label" for="selling_price">Selling Price</label>
                                 <div class="input-group input-group-merge">
-                                    <input class="form-control @error('selling_price') is-invalid @enderror" type="number"  id="selling_price" name="selling_price" step="0.01" min="0">
+                                    <input class="form-control @error('selling_price') is-invalid @enderror" id="selling_price" name="selling_price" step="0.01" min="0">
                                     <span class="input-group-text">$</span>
                                     @error('selling_price')
                                         <span class="invalid-feedback" role="alert">
