@@ -18,10 +18,7 @@
                             <div class="mb-3 col-md-12">
                                 <div class="d-flex align-items-center gap-3">
                                     <div class="position-relative">
-                                        
-
                                         <img src="{{ $company->image_logo ?? 'img.png' }}" alt="Product" class="rounded" width="100" height="100" style="object-fit: cover;">
-                                        
                                     </div>
                                     <div>
                                         <input type="file" id="image" name="image" class="form-control d-none" accept="image/*">
@@ -31,7 +28,7 @@
                                     </div>
                                 </div>
                                 @error('image')
-                                    <span class="invalid-feedback" role="alert">
+                                    <span class="invalid-feedback" role="alert" style="display: block;">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
@@ -84,7 +81,6 @@
                                 <label class="form-label" for="brand">Brand</label>
                                 <select class="form-select" name="brand_id" id="brand_id">
                                     <option value="" disabled selected>Select Brand</option>
-
                                     <option value="1" @if(old('brand_id') == 1) selected @endif>Apple</option>
                                     <option value="2" @if(old('brand_id') == 2) selected @endif>Samsung</option>
                                     <option value="3" @if(old('brand_id') == 3) selected @endif>Huawei</option>
@@ -116,16 +112,20 @@
                             </div>
 
                             <div class="mb-3 col-md-6">
-                                <label class="form-label" for="model_type">Model</label>
-                                <input class="form-control @error('model_type') is-invalid @enderror" type="text" value="{{ old('model_type') }}" id="model_type" name="model_type" placeholder="Enter model">
-                                @error('model_type')
-                                    <span class="invalid-feedback" role="alert">
+                                <label class="form-label" for="model_type_id">Model</label>
+                                <select class="form-select @error('model_type_id') is-invalid @enderror" name="model_type_id" id="model_type_id">
+                                    <option value="">Select Model</option>
+                                    <option value="1" {{ old('model_type_id') == 1 ? 'selected' : '' }}>iPhone 15 Pro Max</option>
+                                    <option value="2" {{ old('model_type_id') == 2 ? 'selected' : '' }}>iPhone 14 Pro</option>
+                                    <option value="3" {{ old('model_type_id') == 3 ? 'selected' : '' }}>Galaxy S24 Ultra</option>
+                                </select>
+                                @error('model_type_id')
+                                    <span class="invalid-feedback">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
                             </div>
 
-                            
                             <div class="mb-3 col-md-6">
                                 <label class="form-label" for="color">Color</label>
                                 <select class="form-select @error('color_id') is-invalid @enderror" name="color_id" id="color_id">
@@ -159,7 +159,6 @@
                                 @enderror
                             </div>
 
-                            
                             <div class="mb-3 col-md-6">
                                 <label class="form-label" for="type_of_machine">Type of Machine</label>
                                 <select class="form-select @error('type_of_machine') is-invalid @enderror" name="type_of_machine" id="type_of_machine">
@@ -195,42 +194,41 @@
                             <div class="mb-3 col-md-6">
                                 <label class="form-label" for="battery_percentage">Battery Percentage</label>
                                 <div class="input-group input-group-merge">
-                                    <input class="form-control @error('battery_percentage') is-invalid @enderror" id="battery_percentage" name="battery_percentage" min="0" max="100">
+                                    <input  class="form-control @error('battery_percentage') is-invalid @enderror" id="battery_percentage" name="battery_percentage" value="{{ old('battery_percentage') }}" min="0" max="100">
                                     <span class="input-group-text">%</span>
-                                    @error('battery_percentage')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
                                 </div>
+                                @error('battery_percentage')
+                                    <span class="invalid-feedback" role="alert" style="display: block;">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                             </div>
 
                             <div class="mb-3 col-md-6">
                                 <label class="form-label" for="percentage">Product Percentage</label>
                                 <div class="input-group input-group-merge">
-                                    <input class="form-control @error('percentage') is-invalid @enderror"  id="percentage" name="percentage" >
+                                    <input  class="form-control @error('percentage') is-invalid @enderror" id="percentage" name="percentage" value="{{ old('percentage') }}" min="0" max="100">
                                     <span class="input-group-text">%</span>
-                                    @error('percentage')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
                                 </div>
+                                @error('percentage')
+                                    <span class="invalid-feedback" role="alert" style="display: block;">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                             </div>
 
                             <div class="mb-3 col-md-6">
                                 <label class="form-label" for="purchase_price">Purchase Price</label>
                                 <div class="input-group input-group-merge">
-                                    <input class="form-control @error('purchase_price') is-invalid @enderror"  id="purchase_price" name="purchase_price" step="0.01" min="0">
+                                    <input  class="form-control @error('purchase_price') is-invalid @enderror" id="purchase_price" name="purchase_price" value="{{ old('purchase_price') }}" step="0.01" min="0">
                                     <span class="input-group-text">$</span>
-                                    @error('purchase_price')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
                                 </div>
+                                @error('purchase_price')
+                                    <span class="invalid-feedback" role="alert" style="display: block;">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                             </div>
-
                             
                             <div class="mb-3 col-md-6">
                                 <label class="form-label" for="purchase_date">Purchase Date</label>
@@ -245,16 +243,15 @@
                             <div class="mb-3 col-md-6">
                                 <label class="form-label" for="selling_price">Selling Price</label>
                                 <div class="input-group input-group-merge">
-                                    <input class="form-control @error('selling_price') is-invalid @enderror" id="selling_price" name="selling_price" step="0.01" min="0">
+                                    <input  class="form-control @error('selling_price') is-invalid @enderror" id="selling_price" name="selling_price" value="{{ old('selling_price') }}" step="0.01" min="0">
                                     <span class="input-group-text">$</span>
-                                    @error('selling_price')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
                                 </div>
+                                @error('selling_price')
+                                    <span class="invalid-feedback" role="alert" style="display: block;">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                             </div>
-
 
                             <div class="mb-3 col-md-6">
                                 <label class="form-label" for="status">Product Status</label>
@@ -284,9 +281,7 @@
             </div>
         </div>
     </div>
-    <!-- / Content -->
-</div>
-<!-- Content wrapper -->
+    </div>
 @endsection
 @push('script')
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.css" rel="stylesheet"/>
@@ -322,3 +317,4 @@
     });
 </script>
 @endpush
+
