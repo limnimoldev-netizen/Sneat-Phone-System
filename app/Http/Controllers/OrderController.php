@@ -34,8 +34,11 @@ class OrderController extends Controller
   {
     
     $parameterNames = [];
+    $query = Order::query();
+        $customers = Customer::all();
     if ($request->search) {
         $filters = $request->only(['customer', 'from_date', 'to_date']);
+        
 
         if (!empty($filters['customer'])) {
             $query->where('customer_id', $filters['customer']);
@@ -67,6 +70,16 @@ class OrderController extends Controller
     ));
   }
 
+
+
+
+// add sale
+    public function create()
+    {
+        return view('orders.create');
+    }
+
+   
      /**
      * Display the specified resource.
      */
