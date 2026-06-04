@@ -18,13 +18,20 @@
     <div class=" bg-white rounded-lg shadow-sm border border-gray-100 p-6 m-6">
         <h2 class="text-xl font-medium text-gray-500 mb-6">Register Sale</h2>
 
-        <form id="saleForm" onsubmit="handleSubmit(event)">
+        <!-- <form id="saleForm" onsubmit="handleSubmit(event)"> -->
+
+        
+        <form id="saleForm" action="{{ route('sales.store', ['lang' => app()->getLocale()]) }}" method="POST" onsubmit="handleSubmit(event)">
+        @csrf
+
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <div>
                     <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Sale Date</label>
                     <div class="relative">
-                        <input type="date" required
-                            class="w-full border border-gray-200 rounded px-3 py-2 text-gray-700 focus:outline-none focus:border-indigo-500 appearance-none bg-transparent">
+
+                    <!-- add by nimol -->
+                        <input type="date" name="order_date" required class="w-full border border-gray-200 rounded px-3 py-2 text-gray-700 focus:outline-none focus:border-indigo-500 bg-white">  
+
                     </div>
                 </div>
                 <div>
@@ -34,6 +41,18 @@
                         <option>John Doe</option>
                         <option>Jane Smith</option>
                     </select>
+                    
+                    <!-- add by nimol -->
+                    <!-- <select name="customer_id" class="w-full border border-gray-200 rounded px-3 py-2 text-gray-700 focus:outline-none focus:border-indigo-500 bg-white">
+                        <option value="">Walk in Customer</option>
+                        @foreach($customers as $customer)
+                            <option value="{{ $customer->id }}">{{ $customer->name }}</option>
+                        @endforeach
+                    </select> -->
+
+                    <!-- Add this hidden input inside the form -->
+                    <input type="hidden" name="products" id="productsInput">
+
                 </div>
             </div>
 
@@ -46,6 +65,24 @@
                     <option value="2" data-imei="IMEI392019" data-name="Samsung Galaxy S24" data-detail="256GB, Onyx Black" data-price="799.00">Samsung Galaxy S24</option>
                     <option value="3" data-imei="IMEI583021" data-name="iPad Air" data-detail="64GB, Wi-Fi, Space Gray" data-price="599.00">iPad Air</option>
                 </select>
+
+
+                <!-- add by nimol -->
+                <!-- <select id="productSelect" onchange="addProduct(this)" 
+                    class="w-full border border-gray-200 rounded px-3 py-2 text-gray-700 focus:outline-none focus:border-indigo-500 bg-white">
+                    <option value="" disabled selected>Select Order Product</option>
+                    @foreach($products as $product)
+                        <option value="{{ $product->id }}"
+                            data-imei="{{ $product->imei }}"
+                            data-name="{{ $product->name }}"
+                            data-detail="{{ $product->detail }}"
+                            data-price="{{ $product->price }}">
+                            {{ $product->name }}
+                        </option>
+                    @endforeach
+                </select> -->
+
+
             </div>
 
             <div class="border border-gray-100 rounded mb-8 overflow-hidden">
@@ -76,8 +113,9 @@
 
             <div class="mb-6">
                 <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Note</label>
-                <textarea rows="4" 
-                    class="w-full border border-gray-200 rounded p-3 text-gray-700 focus:outline-none focus:border-indigo-500 resize-y"></textarea>
+
+                <!-- add by nimol -->
+                <textarea name="note" rows="4" class="w-full border border-gray-200 rounded px-3 py-2 text-gray-700 focus:outline-none focus:border-indigo-500 bg-white"></textarea>
             </div>
 
             <div class="flex gap-3">
@@ -198,15 +236,34 @@ function resetForm() {
     renderTable();
 }
 
-function handleSubmit(event) {
-    event.preventDefault();
-    if(items.length === 0) {
-        alert('Please add at least one product to the order.');
-        return;
+// function handleSubmit(event) {
+//     event.preventDefault();
+//     if(items.length === 0) {
+//         alert('Please add at least one product to the order.');
+//         return;
+//     }
+//     alert('Order submitted successfully!');
+//     resetForm();
+// }
+
+    // add by nimol
+    function handleSubmit(event) {
+        event.preventDefault();
+        if (items.length === 0) {
+            alert('Please add at least one product to the order.');
+            return;
+        }
+
+        // Pass selected products to hidden input
+        document.getElementById('productsInput').value = JSON.stringify(
+            items.map(i => ({ id: i.optionValue, price: i.price }))
+        );
+
+        // Submit the form to Laravel
+        document.getElementById('saleForm').submit();
     }
-    alert('Order submitted successfully!');
-    resetForm();
-}
+
+
     </script>
 </body>
 </html>
