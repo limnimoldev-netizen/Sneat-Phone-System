@@ -13,9 +13,9 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="bg-[#f8f9fa] min-h-screen p-6 font-sans">
+<body class="bg-[#f8f9fa] min-h-screen font-sans">
 
-    <div class="max-w-7xl mx-auto bg-white rounded-lg shadow-sm border border-gray-100 p-6">
+    <div class=" bg-white rounded-lg shadow-sm border border-gray-100 p-6 m-6">
         <h2 class="text-xl font-medium text-gray-500 mb-6">Register Sale</h2>
 
         <form id="saleForm" onsubmit="handleSubmit(event)">
