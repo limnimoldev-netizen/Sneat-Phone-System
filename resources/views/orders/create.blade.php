@@ -93,89 +93,120 @@
         </form>
     </div>
 
-    <script>
+    <script >
         let items = [];
 
-        function addProduct(selectElement) {
-            const selectedOption = selectElement.options[selectElement.selectedIndex];
-            if (!selectedOption.value) return;
+function addProduct(selectElement) {
+    const selectedOption = selectElement.options[selectElement.selectedIndex];
+    if (!selectedOption.value) return;
 
-            // Extract data attributes
-            const imei = selectedOption.getAttribute('data-imei');
-            const name = selectedOption.getAttribute('data-name');
-            const detail = selectedOption.getAttribute('data-detail');
-            const price = parseFloat(selectedOption.getAttribute('data-price'));
+    // Capture the original option value (e.g., "1", "2") to target it later
+    const optionValue = selectedOption.value;
 
-            // Add item to array
-            items.push({ id: Date.now(), imei, name, detail, price });
-            
-            // Reset select element back to placeholder
-            selectElement.selectedIndex = 0;
+    // Extract data attributes
+    const imei = selectedOption.getAttribute('data-imei');
+    const name = selectedOption.getAttribute('data-name');
+    const detail = selectedOption.getAttribute('data-detail');
+    const price = parseFloat(selectedOption.getAttribute('data-price'));
 
-            renderTable();
+    // Add item to array (storing 'optionValue' inside the item object)
+    items.push({ id: Date.now(), optionValue, imei, name, detail, price });
+    
+    // Hide and disable the chosen option from the dropdown instantly
+    selectedOption.hidden = true;
+    selectedOption.disabled = true;
+
+    // Reset select element back to placeholder
+    selectElement.selectedIndex = 0;
+
+    renderTable();
+}
+
+function removeItem(id) {
+    // Find the item being removed to get its original option value
+    const itemToRemove = items.find(item => item.id === id);
+    
+    if (itemToRemove) {
+        // Bring back the option in the dropdown list
+        const selectElement = document.getElementById('productSelect');
+        const optionToRestore = selectElement.querySelector(`option[value="${itemToRemove.optionValue}"]`);
+        if (optionToRestore) {
+            optionToRestore.hidden = false;
+            optionToRestore.disabled = false;
         }
+    }
 
-        function removeItem(id) {
-            items = items.filter(item => item.id !== id);
-            renderTable();
+    items = items.filter(item => item.id !== id);
+    renderTable();
+}
+
+function renderTable() {
+    const tbody = document.getElementById('tableBody');
+    const totalAmountSpan = document.getElementById('totalAmount');
+    
+    // Clear existing elements dynamically
+    tbody.innerHTML = '';
+
+    if (items.length === 0) {
+        tbody.innerHTML = `
+            <tr id="emptyRow">
+                <td colspan="5" class="py-12 text-center text-xs font-bold text-gray-400 tracking-wider bg-white">
+                    NO DATA AVAILABLE
+                </td>
+            </tr>`;
+        totalAmountSpan.textContent = '0.00';
+        return;
+    }
+
+    let total = 0;
+
+    items.forEach(item => {
+        total += item.price;
+        const row = document.createElement('tr');
+        row.className = "border-b border-gray-100 hover:bg-gray-50/50 transition-colors text-sm text-gray-600";
+        row.innerHTML = `
+            <td class="p-3 font-medium">${item.imei}</td>
+            <td class="p-3">${item.name}</td>
+            <td class="p-3 text-gray-400">${item.detail}</td>
+            <td class="p-3 font-medium">${item.price.toFixed(2)}</td>
+            <td class="p-3 text-center">
+                <button type="button" onclick="removeItem(${item.id})" class="text-red-500 hover:text-red-700 p-1">
+                    <i class="fa-regular fa-trash-can"></i>
+                </button>
+            </td>
+        `;
+        tbody.appendChild(row);
+    });
+
+    totalAmountSpan.textContent = total.toFixed(2);
+}
+
+function resetForm() {
+    document.getElementById('saleForm').reset();
+    
+    // Restore ALL hidden/disabled options back to visible when form clears
+    const selectElement = document.getElementById('productSelect');
+    const options = selectElement.querySelectorAll('option');
+    options.forEach(option => {
+        if (option.value) { // Skip the default placeholder option
+            option.hidden = false;
+            option.disabled = false;
         }
+    });
 
-        function renderTable() {
-            const tbody = document.getElementById('tableBody');
-            const totalAmountSpan = document.getElementById('totalAmount');
-            
-            // Clear existing elements dynamically
-            tbody.innerHTML = '';
+    items = [];
+    renderTable();
+}
 
-            if (items.length === 0) {
-                tbody.innerHTML = `
-                    <tr id="emptyRow">
-                        <td colspan="5" class="py-12 text-center text-xs font-bold text-gray-400 tracking-wider bg-white">
-                            NO DATA AVAILABLE
-                        </td>
-                    </tr>`;
-                totalAmountSpan.textContent = '0.00';
-                return;
-            }
-
-            let total = 0;
-
-            items.forEach(item => {
-                total += item.price;
-                const row = document.createElement('tr');
-                row.className = "border-b border-gray-100 hover:bg-gray-50/50 transition-colors text-sm text-gray-600";
-                row.innerHTML = `
-                    <td class="p-3 font-medium">${item.imei}</td>
-                    <td class="p-3">${item.name}</td>
-                    <td class="p-3 text-gray-400">${item.detail}</td>
-                    <td class="p-3 font-medium">${item.price.toFixed(2)}</td>
-                    <td class="p-3 text-center">
-                        <button type="button" onclick="removeItem(${item.id})" class="text-red-500 hover:text-red-700 p-1">
-                            <i class="fa-regular fa-trash-can"></i>
-                        </button>
-                    </td>
-                `;
-                tbody.appendChild(row);
-            });
-
-            totalAmountSpan.textContent = total.toFixed(2);
-        }
-
-        function resetForm() {
-            document.getElementById('saleForm').reset();
-            items = [];
-            renderTable();
-        }
-
-        function handleSubmit(event) {
-            event.preventDefault();
-            if(items.length === 0) {
-                alert('Please add at least one product to the order.');
-                return;
-            }
-            alert('Order submitted successfully!');
-            resetForm();
-        }
+function handleSubmit(event) {
+    event.preventDefault();
+    if(items.length === 0) {
+        alert('Please add at least one product to the order.');
+        return;
+    }
+    alert('Order submitted successfully!');
+    resetForm();
+}
     </script>
 </body>
 </html>
