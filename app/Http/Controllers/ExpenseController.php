@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Employee;
 use App\Models\Expense;
 use App\Models\ExpenseCategory;
 use Illuminate\Http\Request;
@@ -84,7 +85,8 @@ class ExpenseController extends Controller
       ]);
 
        // Get the currently authenticated user's employee ID
-       $employeeId = Auth::user()->id;
+        $employeeId = Auth::user()->employee->id;
+
 
       // Create the expense with the validated data and associate it with the employee
       Expense::create([

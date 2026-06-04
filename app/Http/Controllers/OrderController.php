@@ -32,7 +32,9 @@ class OrderController extends Controller
    */
   public function index(Request $request)
   {
-    
+    // code add
+    $query = Order::query();  
+
     $parameterNames = [];
     $query = Order::query();
         $customers = Customer::all();
@@ -63,6 +65,10 @@ class OrderController extends Controller
 
     $orders = $query->orderBy('order_date', 'desc')->paginate(20);
     session(['printInvoiceId' => null]);
+
+    // code add
+    $customers = Customer::pluck('name', 'id');
+    
     return view('orders.index', compact(
       'orders',
       'customers',

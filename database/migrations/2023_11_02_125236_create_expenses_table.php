@@ -14,11 +14,11 @@ return new class extends Migration
         Schema::create('expenses', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->foreignId('category_id')->references('id')->on('expense_categories')->cascadeOnDelete()->comment('expense_categories.id');
-            $table->foreignId('employee_id')->references('id')->on('employees')->cascadeOnDelete()->comment('employees.id');
-            $table->string('amount')->default(0);
+            $table->foreignId('category_id')->references('id')->on('expense_categories')->cascadeOnDelete();
+            $table->foreignId('employee_id')->references('id')->on('users')->cascadeOnDelete();
+            $table->decimal('amount', 10, 2)->default(0);
             $table->text('note')->nullable();
-            $table->date('date')->format('d/m/Y')->nullable();
+            $table->date('date')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
