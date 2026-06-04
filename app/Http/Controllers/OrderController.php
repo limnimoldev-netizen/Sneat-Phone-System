@@ -71,15 +71,22 @@ class OrderController extends Controller
   }
 
 
+   // add function by nimol add sale
 
-
-// add sale
     public function create()
     {
-        return view('orders.create');
+        $customers = Customer::all();
+        $products = Product::all();
+
+        return view('orders.create', compact(
+            'customers',
+            'products'
+        ));
     }
 
-   
+    
+
+
      /**
      * Display the specified resource.
      */
@@ -134,4 +141,6 @@ class OrderController extends Controller
       $type = $request->type ?? 'download';
       return view('orders.invoice-pdf', compact('order', 'order_detals', 'currentDate' ,'file_pdf', 'type'));
     }
+
+
 }
