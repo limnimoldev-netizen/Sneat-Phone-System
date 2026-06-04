@@ -104,25 +104,23 @@ Route::group([
     
 
     Route::group(['prefix'=>'order','as'=>'orders.'], function(){
-      Route::get('/create', [OrderController::class, 'create'])->name('create');
-      Route::get('/', [OrderController::class, 'index'])->name('index');
-      Route::get('/create', [OrderController::class, 'create'])->name('create');
-      Route::post('/store', [OrderController::class, 'store'])->name('store'); 
-      Route::get('/show/{id}', [OrderController::class, 'show'])->name('show');
-      Route::get('/edit/{id}', [OrderController::class, 'edit'])->name('edit');
-      Route::put('/update/{id}', [OrderController::class, 'update'])->name('update');
-      Route::delete('/destroy/{id}', [OrderController::class, 'destroy'])->name('destroy');
+        Route::get('/', [OrderController::class, 'index'])->name('index');
+        Route::get('/create', [OrderController::class, 'create'])->name('create');
+        Route::post('/store', [OrderController::class, 'store'])->name('store');
+        Route::get('/show/{id}', [OrderController::class, 'show'])->name('show');
+        Route::get('/edit/{id}', [OrderController::class, 'edit'])->name('edit');
+        Route::put('/update/{id}', [OrderController::class, 'update'])->name('update');
+        Route::delete('/destroy/{id}', [OrderController::class, 'destroy'])->name('destroy');
     });
 
     Route::group(['prefix'=>'sale','as'=>'sales.'], function(){
-      Route::get('/', [OrderController::class, 'index'])->name('index');
-      Route::get('/create', [OrderController::class, 'create'])->name('create');
-      Route::post('/store', [OrderController::class, 'store'])->name('store');
-      Route::get('/show/{id}', [OrderController::class, 'show'])->name('show');
-      Route::get('/edit/{id}', [OrderController::class, 'edit'])->name('edit');
-      Route::put('/update/{id}', [OrderController::class, 'update'])->name('update');
-      Route::delete('/destroy/{id}', [OrderController::class, 'destroy'])->name('destroy');
-      
+        Route::get('/', [OrderController::class, 'index'])->name('index');
+        Route::get('/create', [OrderController::class, 'create'])->name('create');
+        Route::post('/store', [OrderController::class, 'store'])->name('store');
+        Route::get('/show/{id}', [OrderController::class, 'show'])->name('show');
+        Route::get('/edit/{id}', [OrderController::class, 'edit'])->name('edit');
+        Route::put('/update/{id}', [OrderController::class, 'update'])->name('update');
+        Route::delete('/destroy/{id}', [OrderController::class, 'destroy'])->name('destroy');
     });
 
 
