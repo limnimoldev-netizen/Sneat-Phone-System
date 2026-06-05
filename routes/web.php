@@ -62,8 +62,22 @@ Route::group([
       Route::get('/product/pdf', [ReportController::class, 'productPdf'])->name('product.pdf');
       Route::get('/loan/list-loan', [ReportController::class, 'listLoan'])->name('loan.list-loan');
     });
-    Route::resource('roles', RoleController::class);
-    Route::resource('products', ProductController::class);
+
+    Route::group(['prefix' => 'roles' , 'as' => 'roles.'] , function (){
+
+    Route::get('/' , [RoleController::class , 'index']) -> name('index');
+    });
+
+    Route::group(['prefix' => 'products' , 'as' => 'products.'] , function (){
+      Route::get('/' , [ProductController::class , 'index']) -> name('index');
+      Route::get('/edit/{id}' , [ProductController::class , 'edit']) -> name('edit');
+      Route::get('/products/create', [ProductController::class, 'create'])->name('create');
+      Route::get('/products/show', [ProductController::class, 'show'])->name('show');
+      Route::get('/products/destroy', [ProductController::class, 'destroy'])->name('destroy');
+    });
+
+
+
     Route::group(['prefix'=>'user','as'=>'users.'], function(){
         Route::get('/', [EmployeeController::class, 'index'])->name('index');
         Route::get('/edit/{id}', [EmployeeController::class, 'edit'])->name('edit');
@@ -84,6 +98,7 @@ Route::group([
     Route::group(['prefix'=>'sale','as'=>'sales.'], function(){
       Route::get('/create', [OrderController::class, 'index'])->name('create');
       Route::get('/', [OrderController::class, 'index'])->name('index');
+
      
     });
     Route::group(['prefix'=>'cart','as'=>'carts.'], function(){

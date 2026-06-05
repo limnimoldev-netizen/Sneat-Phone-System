@@ -149,7 +149,7 @@
                                   </a>
                                   @endcan
                                   @can('product-edit')
-                                  <a href="{{ route('products.edit', withLang(['product' => $product->id])) }}" class="btn btn-icon btn-outline-secondary">
+                                  <a href="{{ route('products.edit', withLang(['id' => $product->id])) }}" class="btn btn-icon btn-outline-secondary">
                                       <span class="tf-icons bx bx-edit-alt"></span>
                                   </a>
                                   @endcan

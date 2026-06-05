@@ -129,12 +129,15 @@ class ProductController extends Controller
       return redirect()->route('products.show', withLang(['product' => $product->id]));
     }
 
+
     /**
      * Display the specified resource.
      */
     public function show(string $lang, Product $product)
     {
+      
       $product = $product->with('brand', 'series', 'color', 'modelType', 'storage')->findOrfail($product->id);
+      dd(['product' => $product]);
       return view('products.show', ['product' => $product]);
     }
 
@@ -144,6 +147,8 @@ class ProductController extends Controller
     public function edit(string $lang, Product $product)
     {
       
+      return view('products.edit');
+    
     }
 
     /**
@@ -181,5 +186,7 @@ class ProductController extends Controller
     $product->delete();
     return redirect()->route('products.index', withLang());
   }
+
+
 
 }
