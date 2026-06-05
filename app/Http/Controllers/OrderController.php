@@ -98,12 +98,13 @@ class OrderController extends Controller
         $total        = collect($products)->sum('price');
 
         // Save order
+       
         $order = Order::create([
-            'customer_id'    => $customer_id,
+            'customer_id'    => $request->input('customer_id') ?: 1, 
             'employee_id'    => auth()->id(),
             'total_amount'   => $total,
-            'order_date'     => $order_date,
-            'note'           => $note,
+            'order_date'     => $request->input('order_date'),
+            'note'           => $request->input('note'),
             'payment_status' => 1,
             'payment_type'   => 1,
             'status'         => 1,
@@ -114,9 +115,11 @@ class OrderController extends Controller
             OrderDetail::create([
                 'order_id'   => $order->id,
                 'product_id' => $item['id'],
+                'unit_price' => $item['price'], 
                 'price'      => $item['price'],
             ]);
-}
+        }
+
         return redirect()->route('sales.index', app()->getLocale())->with('success', 'Order saved!');
 
 

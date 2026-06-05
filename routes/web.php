@@ -74,7 +74,7 @@ Route::group([
           Route::get('/edit/{id}', [RoleController::class, 'edit'])->name('edit');
           Route::put('/update/{id}', [RoleController::class, 'update'])->name('update');
           Route::delete('/destroy/{id}', [RoleController::class, 'destroy'])->name('destroy');
-});
+  });
 
     //Product Route
     // Route::resource('products', ProductController::class);
@@ -104,7 +104,6 @@ Route::group([
     
 
     Route::group(['prefix'=>'order','as'=>'orders.'], function(){
-      Route::get('/create', [OrderController::class, 'create'])->name('create');
       Route::get('/', [OrderController::class, 'index'])->name('index');
       Route::get('/create', [OrderController::class, 'create'])->name('create');
       Route::post('/store', [OrderController::class, 'store'])->name('store'); 
