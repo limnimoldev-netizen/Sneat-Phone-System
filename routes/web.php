@@ -75,6 +75,7 @@ Route::group([
       Route::get('/products/show', [ProductController::class, 'show'])->name('show');
       Route::get('/products/destroy', [ProductController::class, 'destroy'])->name('destroy');
     });
+    ///testing push code without username and password
 
 
 
