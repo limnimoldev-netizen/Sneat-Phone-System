@@ -32,10 +32,15 @@ class OrderController extends Controller
    */
   public function index(Request $request)
   {
-    
+    // code add
+    $query = Order::query();  
+
     $parameterNames = [];
+    $query = Order::query();
+        $customers = Customer::all();
     if ($request->search) {
         $filters = $request->only(['customer', 'from_date', 'to_date']);
+        
 
         if (!empty($filters['customer'])) {
             $query->where('customer_id', $filters['customer']);
@@ -60,12 +65,33 @@ class OrderController extends Controller
 
     $orders = $query->orderBy('order_date', 'desc')->paginate(20);
     session(['printInvoiceId' => null]);
+
+    // code add
+    $customers = Customer::pluck('name', 'id');
+    
     return view('orders.index', compact(
       'orders',
       'customers',
       'parameterNames'
     ));
   }
+
+
+   // add function by nimol add sale
+
+    public function create()
+    {
+        $customers = Customer::all();
+        $products = Product::all();
+
+        return view('orders.create', compact(
+            'customers',
+            'products'
+        ));
+    }
+
+    
+
 
      /**
      * Display the specified resource.
@@ -121,4 +147,6 @@ class OrderController extends Controller
       $type = $request->type ?? 'download';
       return view('orders.invoice-pdf', compact('order', 'order_detals', 'currentDate' ,'file_pdf', 'type'));
     }
+
+
 }

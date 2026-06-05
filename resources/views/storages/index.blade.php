@@ -44,6 +44,15 @@
                             <a href="#" class="btn btn-icon btn-outline-secondary edit-storages" data-bs-toggle="modal" data-bs-target="#editstorages" data-id="{{ $storage->id }}" data-value="{{ $storage->name }}">
                                 <span class="tf-icons bx bx-edit-alt"></span>
                             </a>
+                            <form action="{{ route('storage.destroy', withLang(['id' => $storage->id])) }}" method="POST"  class="d-inline">
+                                    @csrf
+                                    @method('DELETE')
+
+                                    <button type="submit" class="btn btn-icon btn-outline-secondary" >
+                                        <span class="tf-icons bx bx-trash"></span>
+                                    </button>
+                            </form>
+
                         </td>
                     </tr>
                     @endforeach
@@ -158,7 +167,7 @@
 
                 // Make an AJAX request to check for uniqueness
                 $.ajax({
-                    url: '{{ route('storage.update', withLang()) }}',
+                    url: "{{ route('storage.update', withLang()) }}",
                     method: 'POST',
                     data: { name: name, id: id },
                     headers: {

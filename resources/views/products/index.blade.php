@@ -144,7 +144,8 @@
 
                               <td>
                                   @can('product-list')
-                                  <a href="{{ route('products.show', withLang(['product' => $product->id])) }}" class="btn btn-icon btn-outline-secondary">
+
+                                  <a href="{{ route('products.show', withLang(['id' => $product->id])) }}" class="btn btn-icon btn-outline-secondary">
                                       <span class="tf-icons bx bx-detail"></span>
                                   </a>
                                   @endcan
@@ -162,7 +163,7 @@
                                     @endif
                                   @endcan
 
-                                    <form method="POST" action="{{ route('products.destroy', withLang(['product' => $product->id])) }}" class="d-inline">
+                                    <form method="POST" action="{{ route('products.destroy', withLang(['id' => $product->id])) }}" class="d-inline">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-icon btn-outline-danger" onclick="return confirm('Are you sure you want to delete this product?')">
