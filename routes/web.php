@@ -88,7 +88,17 @@ Route::group([
         Route::delete('/destroy/{id}',[ProductController::class, 'destroy'])->name('destroy');
 
     });
-  
+
+    // Route::group(['prefix' => 'product', 'as' => 'products.'], function () {
+    //     Route::get('/',                     [ProductController::class, 'index'])->name('index');
+    //     Route::get('/create',               [ProductController::class, 'create'])->name('create');
+    //     Route::post('/store',               [ProductController::class, 'store'])->name('store');
+    //     Route::get('/show/{product}',       [ProductController::class, 'show'])->name('show');
+    //     Route::get('/edit/{product}',       [ProductController::class, 'edit'])->name('edit');
+    //     Route::put('/update/{product}',     [ProductController::class, 'update'])->name('update');
+    //     Route::delete('/destroy/{product}', [ProductController::class, 'destroy'])->name('destroy');
+    // });
+      
     Route::group(['prefix'=>'user','as'=>'users.'], function(){
         Route::get('/', [EmployeeController::class, 'index'])->name('index');
         Route::get('/edit/{id}', [EmployeeController::class, 'edit'])->name('edit');
