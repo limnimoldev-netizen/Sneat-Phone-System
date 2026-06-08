@@ -18,10 +18,7 @@
                             <div class="mb-3 col-md-12">
                                 <div class="d-flex align-items-center gap-3">
                                     <div class="position-relative">
-                                        
-
                                         <img src="{{ $company->image_logo ?? 'img.png' }}" alt="Product" class="rounded" width="100" height="100" style="object-fit: cover;">
-                                        
                                     </div>
                                     <div>
                                         <input type="file" id="image" name="image" class="form-control d-none" accept="image/*">
@@ -31,7 +28,7 @@
                                     </div>
                                 </div>
                                 @error('image')
-                                    <span class="invalid-feedback" role="alert">
+                                    <span class="invalid-feedback" role="alert" style="display: block;">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
@@ -82,15 +79,15 @@
 
                             <div class="mb-3 col-md-6">
                                 <label class="form-label" for="brand">Brand</label>
-                                <select class="form-select @error('brand') is-invalid @enderror" name="brand" id="brand">
+                                <select class="form-select" name="brand_id" id="brand_id">
                                     <option value="" disabled selected>Select Brand</option>
-                                    <option value="apple" @if(old('brand') == 'apple') selected @endif>Apple</option>
-                                    <option value="samsung" @if(old('brand') == 'samsung') selected @endif>Samsung</option>
-                                    <option value="huawei" @if(old('brand') == 'huawei') selected @endif>Huawei</option>
-                                    <option value="xiaomi" @if(old('brand') == 'xiaomi') selected @endif>Xiaomi</option>
-                                    <option value="oppo" @if(old('brand') == 'oppo') selected @endif>Oppo</option>
-                                    <option value="vivo" @if(old('brand') == 'vivo') selected @endif>Vivo</option>
-                                    <option value="other" @if(old('brand') == 'other') selected @endif>Other</option>
+                                    <option value="1" @if(old('brand_id') == 1) selected @endif>Apple</option>
+                                    <option value="2" @if(old('brand_id') == 2) selected @endif>Samsung</option>
+                                    <option value="3" @if(old('brand_id') == 3) selected @endif>Huawei</option>
+                                    <option value="4" @if(old('brand_id') == 4) selected @endif>Xiaomi</option>
+                                    <option value="5" @if(old('brand_id') == 5) selected @endif>Oppo</option>
+                                    <option value="6" @if(old('brand_id') == 6) selected @endif>Vivo</option>
+                                    <option value="7" @if(old('brand_id') == 7) selected @endif>Other</option>
                                 </select>
                                 @error('brand')
                                     <span class="invalid-feedback" role="alert">
@@ -101,14 +98,11 @@
 
                             <div class="mb-3 col-md-6">
                                 <label class="form-label" for="series">Series</label>
-                                <select class="form-select @error('series') is-invalid @enderror" name="series" id="series">
+                                <select class="form-select @error('series_id') is-invalid @enderror" name="series_id" id="series_id">
                                     <option value="" disabled selected>Select Series</option>
-                                    <option value="iphone" @if(old('series') == 'iphone') selected @endif>iPhone</option>
-                                    <option value="galaxy" @if(old('series') == 'galaxy') selected @endif>Galaxy</option>
-                                    <option value="p series" @if(old('series') == 'p series') selected @endif>P Series</option>
-                                    <option value="mi" @if(old('series') == 'mi') selected @endif>MI</option>
-                                    <option value="find" @if(old('series') == 'find') selected @endif>Find</option>
-                                    <option value="other" @if(old('series') == 'other') selected @endif>Other</option>
+                                    <option value="1" @if(old('series_id') == 1) selected @endif>iPhone</option>
+                                    <option value="2" @if(old('series_id') == 2) selected @endif>Galaxy</option>
+                                    <option value="3" @if(old('series_id') == 3) selected @endif>P Series</option>
                                 </select>
                                 @error('series')
                                     <span class="invalid-feedback" role="alert">
@@ -118,25 +112,28 @@
                             </div>
 
                             <div class="mb-3 col-md-6">
-                                <label class="form-label" for="model_type">Model</label>
-                                <input class="form-control @error('model_type') is-invalid @enderror" type="text" value="{{ old('model_type') }}" id="model_type" name="model_type" placeholder="Enter model">
-                                @error('model_type')
-                                    <span class="invalid-feedback" role="alert">
+                                <label class="form-label" for="model_type_id">Model</label>
+                                <select class="form-select @error('model_type_id') is-invalid @enderror" name="model_type_id" id="model_type_id">
+                                    <option value="">Select Model</option>
+                                    <option value="1" {{ old('model_type_id') == 1 ? 'selected' : '' }}>iPhone 15 Pro Max</option>
+                                    <option value="2" {{ old('model_type_id') == 2 ? 'selected' : '' }}>iPhone 14 Pro</option>
+                                    <option value="3" {{ old('model_type_id') == 3 ? 'selected' : '' }}>Galaxy S24 Ultra</option>
+                                </select>
+                                @error('model_type_id')
+                                    <span class="invalid-feedback">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
                             </div>
 
-                            
                             <div class="mb-3 col-md-6">
                                 <label class="form-label" for="color">Color</label>
-                                <select class="form-select @error('color') is-invalid @enderror" name="color" id="color">
+                                <select class="form-select @error('color_id') is-invalid @enderror" name="color_id" id="color_id">
                                     <option value="" disabled selected>Select Color</option>
-                                    <option value="black" @if(old('color') == 'black') selected @endif>Black</option>
-                                    <option value="white" @if(old('color') == 'white') selected @endif>White</option>
-                                    <option value="blue" @if(old('color') == 'blue') selected @endif>Blue</option>
-                                    <option value="red" @if(old('color') == 'red') selected @endif>Red</option>
-                                    <option value="other" @if(old('color') == 'other') selected @endif>Other</option>
+                                    <option value="1" @if(old('color_id') == 1) selected @endif>Black</option>
+                                    <option value="2" @if(old('color_id') == 2) selected @endif>White</option>
+                                    <option value="3" @if(old('color_id') == 3) selected @endif>Blue</option>
+                                    <option value="4" @if(old('color_id') == 4) selected @endif>Red</option>
                                 </select>
                                 @error('color')
                                     <span class="invalid-feedback" role="alert">
@@ -147,14 +144,13 @@
                             
                             <div class="mb-3 col-md-6">
                                 <label class="form-label" for="storage">Storage</label>
-                                <select class="form-select @error('storage') is-invalid @enderror" name="storage" id="storage">
+                                <select class="form-select @error('storage_id') is-invalid @enderror" name="storage_id" id="storage_id">
                                     <option value="" disabled selected>Select Storage</option>
-                                    <option value="32gb" @if(old('storage') == '32gb') selected @endif>32GB</option>
-                                    <option value="64gb" @if(old('storage') == '64gb') selected @endif>64GB</option>
-                                    <option value="128gb" @if(old('storage') == '128gb') selected @endif>128GB</option>
-                                    <option value="256gb" @if(old('storage') == '256gb') selected @endif>256GB</option>
-                                    <option value="512gb" @if(old('storage') == '512gb') selected @endif>512GB</option>
-                                    <option value="1tb" @if(old('storage') == '1tb') selected @endif>1TB</option>
+                                    <option value="1" @if(old('storage_id') == 1) selected @endif>32GB</option>
+                                    <option value="2" @if(old('storage_id') == 2) selected @endif>64GB</option>
+                                    <option value="3" @if(old('storage_id') == 3) selected @endif>128GB</option>
+                                    <option value="4" @if(old('storage_id') == 4) selected @endif>256GB</option>
+                                    <option value="5" @if(old('storage_id') == 5) selected @endif>512GB</option>
                                 </select>
                                 @error('storage')
                                     <span class="invalid-feedback" role="alert">
@@ -163,7 +159,6 @@
                                 @enderror
                             </div>
 
-                            
                             <div class="mb-3 col-md-6">
                                 <label class="form-label" for="type_of_machine">Type of Machine</label>
                                 <select class="form-select @error('type_of_machine') is-invalid @enderror" name="type_of_machine" id="type_of_machine">
@@ -199,42 +194,41 @@
                             <div class="mb-3 col-md-6">
                                 <label class="form-label" for="battery_percentage">Battery Percentage</label>
                                 <div class="input-group input-group-merge">
-                                    <input class="form-control @error('battery_percentage') is-invalid @enderror" id="battery_percentage" name="battery_percentage" min="0" max="100">
+                                    <input  class="form-control @error('battery_percentage') is-invalid @enderror" id="battery_percentage" name="battery_percentage" value="{{ old('battery_percentage') }}" min="0" max="100">
                                     <span class="input-group-text">%</span>
-                                    @error('battery_percentage')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
                                 </div>
+                                @error('battery_percentage')
+                                    <span class="invalid-feedback" role="alert" style="display: block;">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                             </div>
 
                             <div class="mb-3 col-md-6">
                                 <label class="form-label" for="percentage">Product Percentage</label>
                                 <div class="input-group input-group-merge">
-                                    <input class="form-control @error('percentage') is-invalid @enderror"  id="percentage" name="percentage" >
+                                    <input  class="form-control @error('percentage') is-invalid @enderror" id="percentage" name="percentage" value="{{ old('percentage') }}" min="0" max="100">
                                     <span class="input-group-text">%</span>
-                                    @error('percentage')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
                                 </div>
+                                @error('percentage')
+                                    <span class="invalid-feedback" role="alert" style="display: block;">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                             </div>
 
                             <div class="mb-3 col-md-6">
                                 <label class="form-label" for="purchase_price">Purchase Price</label>
                                 <div class="input-group input-group-merge">
-                                    <input class="form-control @error('purchase_price') is-invalid @enderror"  id="purchase_price" name="purchase_price" step="0.01" min="0">
+                                    <input  class="form-control @error('purchase_price') is-invalid @enderror" id="purchase_price" name="purchase_price" value="{{ old('purchase_price') }}" step="0.01" min="0">
                                     <span class="input-group-text">$</span>
-                                    @error('purchase_price')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
                                 </div>
+                                @error('purchase_price')
+                                    <span class="invalid-feedback" role="alert" style="display: block;">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                             </div>
-
                             
                             <div class="mb-3 col-md-6">
                                 <label class="form-label" for="purchase_date">Purchase Date</label>
@@ -249,25 +243,24 @@
                             <div class="mb-3 col-md-6">
                                 <label class="form-label" for="selling_price">Selling Price</label>
                                 <div class="input-group input-group-merge">
-                                    <input class="form-control @error('selling_price') is-invalid @enderror" id="selling_price" name="selling_price" step="0.01" min="0">
+                                    <input  class="form-control @error('selling_price') is-invalid @enderror" id="selling_price" name="selling_price" value="{{ old('selling_price') }}" step="0.01" min="0">
                                     <span class="input-group-text">$</span>
-                                    @error('selling_price')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
                                 </div>
+                                @error('selling_price')
+                                    <span class="invalid-feedback" role="alert" style="display: block;">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                             </div>
 
-
                             <div class="mb-3 col-md-6">
-                                <label class="form-label" for="status">ProductStatus</label>
-                                <select class="form-select @error('status') is-invalid @enderror" id="status" name="status">
+                                <label class="form-label" for="status">Product Status</label>
+                                <select class="form-select @error('status') is-invalid @enderror" name="status" id="status">
                                     <option value="" disabled selected>Select Status</option>
-                                    <option value="available" @if(old('status') == 'available') selected @endif>Available</option>
-                                    <option value="sold" @if(old('status') == 'sold') selected @endif>Sold</option>
-                                    <option value="reserved" @if(old('status') == 'reserved') selected @endif>Reserved</option>
-                                    <option value="maintenance" @if(old('status') == 'maintenance') selected @endif>Maintenance</option>
+                                    <option value="1" @if(old('status') == 1) selected @endif>Available</option>
+                                    <option value="2" @if(old('status') == 2) selected @endif>Sold</option>
+                                    <option value="3" @if(old('status') == 3) selected @endif>Broken</option>
+                                    <option value="4" @if(old('status') == 4) selected @endif>Loan</option>
                                 </select>
                                 @error('status')
                                     <span class="invalid-feedback" role="alert">
@@ -288,9 +281,7 @@
             </div>
         </div>
     </div>
-    <!-- / Content -->
-</div>
-<!-- Content wrapper -->
+    </div>
 @endsection
 @push('script')
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.css" rel="stylesheet"/>
@@ -326,3 +317,4 @@
     });
 </script>
 @endpush
+
