@@ -36,19 +36,19 @@
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Customer</label>
-                    <select class="w-full border border-gray-200 rounded px-3 py-2 text-gray-700 focus:outline-none focus:border-indigo-500 bg-white">
+                    <!-- <select class="w-full border border-gray-200 rounded px-3 py-2 text-gray-700 focus:outline-none focus:border-indigo-500 bg-white">
                         <option>Walk in Customer</option>
                         <option>John Doe</option>
                         <option>Jane Smith</option>
-                    </select>
+                    </select> -->
                     
                     <!-- add by nimol -->
-                    <!-- <select name="customer_id" class="w-full border border-gray-200 rounded px-3 py-2 text-gray-700 focus:outline-none focus:border-indigo-500 bg-white">
+                    <select name="customer_id" class="w-full border border-gray-200 rounded px-3 py-2 text-gray-700 focus:outline-none focus:border-indigo-500 bg-white">
                         <option value="">Walk in Customer</option>
                         @foreach($customers as $customer)
                             <option value="{{ $customer->id }}">{{ $customer->name }}</option>
                         @endforeach
-                    </select> -->
+                    </select>
 
                     <!-- Add this hidden input inside the form -->
                     <input type="hidden" name="products" id="productsInput">
@@ -57,30 +57,37 @@
             </div>
 
             <div class="mb-8">
+                
+
                 <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Product Name</label>
-                <select id="productSelect" onchange="addProduct(this)"
+                <!-- <select id="productSelect" onchange="addProduct(this)"
                     class="w-full border border-gray-200 rounded px-3 py-2 text-gray-700 focus:outline-none focus:border-indigo-500 bg-white">
                     <option value="" disabled selected>Select Order Product</option>
                     <option value="1" data-imei="IMEI847294" data-name="iPhone 15 Pro" data-detail="128GB, Natural Titanium" data-price="999.00">iPhone 15 Pro</option>
                     <option value="2" data-imei="IMEI392019" data-name="Samsung Galaxy S24" data-detail="256GB, Onyx Black" data-price="799.00">Samsung Galaxy S24</option>
                     <option value="3" data-imei="IMEI583021" data-name="iPad Air" data-detail="64GB, Wi-Fi, Space Gray" data-price="599.00">iPad Air</option>
-                </select>
+                </select> -->
 
 
                 <!-- add by nimol -->
-                <!-- <select id="productSelect" onchange="addProduct(this)" 
-                    class="w-full border border-gray-200 rounded px-3 py-2 text-gray-700 focus:outline-none focus:border-indigo-500 bg-white">
-                    <option value="" disabled selected>Select Order Product</option>
+                 
+                <select id="productSelect" onchange="addProduct(this)"
+                    class="w-full border border-gray-200 rounded px-3 py-2 text-gray-700">
+
+                    <option value="" disabled selected>
+                        Select Order Product
+                    </option>
+
                     @foreach($products as $product)
                         <option value="{{ $product->id }}"
-                            data-imei="{{ $product->imei }}"
-                            data-name="{{ $product->name }}"
-                            data-detail="{{ $product->detail }}"
-                            data-price="{{ $product->price }}">
-                            {{ $product->name }}
+                                data-imei="{{ $product->product_imei }}"
+                                data-name="{{ $product->product_name }}"
+                                data-detail="{{ $product->condition }}"
+                                data-price="{{ $product->selling_price }}">
+                            {{ $product->product_name }}
                         </option>
                     @endforeach
-                </select> -->
+                </select>
 
 
             </div>
