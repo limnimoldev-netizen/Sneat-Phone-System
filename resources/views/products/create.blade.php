@@ -18,10 +18,16 @@
                             <div class="mb-3 col-md-12">
                                 <div class="d-flex align-items-center gap-3">
                                     <div class="position-relative">
-                                        <img src="{{ $company->image_logo ?? 'img.png' }}" alt="Product" class="rounded" width="100" height="100" style="object-fit: cover;">
+                                        <img id="previewImage"
+                                            src="{{ $company->image_logo ? asset('images/company/'.$company->image_logo) : asset('img.png') }}"
+                                            alt="Product"
+                                            class="rounded"
+                                            width="100"
+                                            height="100"
+                                            style="object-fit: cover;">
                                     </div>
                                     <div>
-                                        <input type="file" id="image" name="image" class="form-control d-none" accept="image/*">
+                                        <input type="file" id="image" name="image" class="form-control d-none" accept="image/png, image/jpeg">
                                         <button type="button" class="btn btn-primary btn-base" onclick="document.getElementById('image').click()">Upload new photo</button>
                                         <button type="button" class="btn btn-outline-secondary btn-base">Reset</button>
                                         <p class="text-muted mb-0 mt-2">Allowed JPG, GIF or PNG.</p>
@@ -316,5 +322,18 @@
         });
     });
 </script>
+
+<script>
+document.getElementById('image').addEventListener('change', function (event) {
+    let reader = new FileReader();
+
+    reader.onload = function () {
+        document.getElementById('previewImage').src = reader.result;
+    }
+
+    reader.readAsDataURL(event.target.files[0]);
+});
+</script>
+     
 @endpush
 
