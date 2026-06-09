@@ -144,7 +144,7 @@ class ProductController extends Controller
      */
     public function edit(string $lang, Product $product)
     {
-      
+      return view('products.edit', ['product' => $product]);
     }
 
     /**
