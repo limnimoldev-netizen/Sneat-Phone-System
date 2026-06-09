@@ -80,50 +80,44 @@ class OrderController extends Controller
    // add function by nimol add sale
 
     public function create()
-    {
-        $products  = Product::all();
-        $customers = Customer::all();
+{
+    // Must fetch all records to allow data attribute reading to execute cleanly
+    $products  = Product::all();
+    $customers = Customer::all();
 
-        return view('orders.create', compact('products', 'customers'));
-    }
-    
+    return view('orders.create', compact('products', 'customers'));
+}
 
-    // Save the order to database
-    public function store(Request $request)
-    {
-        $customer_id  = $request->input('customer_id');
-        $order_date   = $request->input('order_date');
-        $note         = $request->input('note');
-        $products     = json_decode($request->input('products'), true); // comes from hidden input
-        $total        = collect($products)->sum('price');
+public function store(Request $request)
+{
+    // 1. Decode hidden row payloads back into standard multi-dimensional arrays
+    $products = json_decode($request->input('products'), true) ?? []; 
+    $total    = collect($products)->sum('price');
 
-        // Save order
-       
-        $order = Order::create([
-            'customer_id'    => $request->input('customer_id') ?: 1, 
-            'employee_id'    => auth()->id(),
-            'total_amount'   => $total,
-            'order_date'     => $request->input('order_date'),
-            'note'           => $request->input('note'),
-            'payment_status' => 1,
-            'payment_type'   => 1,
-            'status'         => 1,
+    // 2. Save root master record
+    $order = Order::create([
+        'customer_id'    => $request->input('customer_id') ?: 1, 
+        'employee_id'    => auth()->id(),
+        'total_amount'   => $total,
+        'order_date'     => $request->input('order_date'),
+        'note'           => $request->input('note'),
+        'payment_status' => 1,
+        'payment_type'   => 1,
+        'status'         => 1,
+    ]);
+
+    // 3. Loop items array directly into the database details pivot table
+    foreach ($products as $item) {
+        OrderDetail::create([
+            'order_id'   => $order->id,
+            'product_id' => $item['id'],
+            'unit_price' => $item['price'], 
+            'price'      => $item['price'],
         ]);
-
-        // Save each product as order item
-        foreach ($products as $item) {
-            OrderDetail::create([
-                'order_id'   => $order->id,
-                'product_id' => $item['id'],
-                'unit_price' => $item['price'], 
-                'price'      => $item['price'],
-            ]);
-        }
-
-        return redirect()->route('sales.index', app()->getLocale())->with('success', 'Order saved!');
-
-
     }
+
+    return redirect()->route('sales.index', ['lang' => app()->getLocale()])->with('success', 'Order saved successfully!');
+}
 
      /**
      * Display the specified resource.
