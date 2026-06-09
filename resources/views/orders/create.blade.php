@@ -18,9 +18,7 @@
     <div class=" bg-white rounded-lg shadow-sm border border-gray-100 p-6 m-6">
         <h2 class="text-xl font-medium text-gray-500 mb-6">Register Sale</h2>
 
-        <!-- <form id="saleForm" onsubmit="handleSubmit(event)"> -->
-
-        
+        <!-- <form id="saleForm" onsubmit="handleSubmit(event)"> -->     
         <form id="saleForm" action="{{ route('sales.store', ['lang' => app()->getLocale()]) }}" method="POST" onsubmit="handleSubmit(event)">
         @csrf
 
