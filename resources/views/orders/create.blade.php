@@ -116,6 +116,7 @@
                 <span id="totalAmount" class="text-sm font-semibold text-gray-700">0.00</span>
             </div>
 
+            
             <div class="mb-6">
                 <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Note</label>
 
