@@ -144,11 +144,13 @@
 
                               <td>
                                   @can('product-list')
+
                                   <a href="{{ route('products.show', withLang(['id' => $product->id])) }}" class="btn btn-icon btn-outline-secondary">
                                       <span class="tf-icons bx bx-detail"></span>
                                   </a>
                                   @endcan
                                   @can('product-edit')
+
                                   <a href="{{ route('products.edit', withLang(['id' => $product->id])) }}" class="btn btn-icon btn-outline-secondary">
                                       <span class="tf-icons bx bx-edit-alt"></span>
                                   </a>

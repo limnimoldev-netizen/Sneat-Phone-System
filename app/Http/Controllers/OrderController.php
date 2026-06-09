@@ -36,8 +36,11 @@ class OrderController extends Controller
     $query = Order::query();  
 
     $parameterNames = [];
+    $query = Order::query();
+        $customers = Customer::all();
     if ($request->search) {
         $filters = $request->only(['customer', 'from_date', 'to_date']);
+        
 
         if (!empty($filters['customer'])) {
             $query->where('customer_id', $filters['customer']);
@@ -72,6 +75,58 @@ class OrderController extends Controller
       'parameterNames'
     ));
   }
+
+
+   // add function by nimol add sale
+
+    public function create()
+    {
+        $products  = Product::all();
+        $customers = Customer::all();
+
+        return view('orders.create', compact('products', 'customers'));
+    }
+    
+
+    // Save the order to database
+    public function store(Request $request)
+    {
+        $customer_id  = $request->input('customer_id');
+        $order_date   = $request->input('order_date');
+        $note         = $request->input('note');
+        $products     = json_decode($request->input('products'), true); // comes from hidden input
+        $total        = collect($products)->sum('price');
+
+        // Save order
+       
+        $order = Order::create([
+            'customer_id'    => $request->input('customer_id') ?: 1, 
+            'employee_id'    => auth()->id(),
+            'total_amount'   => $total,
+            'order_date'     => $request->input('order_date'),
+            'note'           => $request->input('note'),
+            'payment_status' => 1,
+            'payment_type'   => 1,
+            'status'         => 1,
+        ]);
+
+        // Save each product as order item
+        foreach ($products as $item) {
+            OrderDetail::create([
+                'order_id'   => $order->id,
+                'product_id' => $item['id'],
+                'unit_price' => $item['price'], 
+                'price'      => $item['price'],
+            ]);
+        }
+
+        return redirect()->route('sales.index', app()->getLocale())->with('success', 'Order saved!');
+
+
+    }
+
+    
+
 
      /**
      * Display the specified resource.
@@ -127,4 +182,6 @@ class OrderController extends Controller
       $type = $request->type ?? 'download';
       return view('orders.invoice-pdf', compact('order', 'order_detals', 'currentDate' ,'file_pdf', 'type'));
     }
+
+
 }
