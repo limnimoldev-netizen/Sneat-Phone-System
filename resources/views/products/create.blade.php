@@ -76,39 +76,33 @@
                                     <option value="used" @if(old('condition') == 'used') selected @endif>Used</option>
                                     <option value="new" @if(old('condition') == 'new') selected @endif>New</option>
                                 </select>
-                                @error('condition')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                                
                             </div>
 
                             <div class="mb-3 col-md-6">
                                 <label class="form-label" for="brand">Brand</label>
                                 <select class="form-select" name="brand_id" id="brand_id">
                                     <option value="" disabled selected>Select Brand</option>
-                                    <option value="1" @if(old('brand_id') == 1) selected @endif>Apple</option>
-                                    <option value="2" @if(old('brand_id') == 2) selected @endif>Samsung</option>
-                                    <option value="3" @if(old('brand_id') == 3) selected @endif>Huawei</option>
-                                    <option value="4" @if(old('brand_id') == 4) selected @endif>Xiaomi</option>
-                                    <option value="5" @if(old('brand_id') == 5) selected @endif>Oppo</option>
-                                    <option value="6" @if(old('brand_id') == 6) selected @endif>Vivo</option>
-                                    <option value="7" @if(old('brand_id') == 7) selected @endif>Other</option>
+
+                                    @foreach($brands as $id => $brand)
+                                        <option value="{{ $id }}">
+                                            {{ $name }}
+                                        </option>
+                                    @endforeach
                                 </select>
-                                @error('brand')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                                
                             </div>
 
                             <div class="mb-3 col-md-6">
                                 <label class="form-label" for="series">Series</label>
-                                <select class="form-select @error('series_id') is-invalid @enderror" name="series_id" id="series_id">
+                                <select class="form-select" name="series_id" id="series_id">
                                     <option value="" disabled selected>Select Series</option>
-                                    <option value="1" @if(old('series_id') == 1) selected @endif>iPhone</option>
-                                    <option value="2" @if(old('series_id') == 2) selected @endif>Galaxy</option>
-                                    <option value="3" @if(old('series_id') == 3) selected @endif>P Series</option>
+
+                                    @foreach($series as $item)
+                                        <option value="{{ $item['id'] }}" {{ old('series_id') == $item['id'] ? 'selected' : '' }}>
+                                            {{ $item['name'] }}
+                                        </option>
+                                    @endforeach
                                 </select>
                                 @error('series')
                                     <span class="invalid-feedback" role="alert">
@@ -119,11 +113,14 @@
 
                             <div class="mb-3 col-md-6">
                                 <label class="form-label" for="model_type_id">Model</label>
-                                <select class="form-select @error('model_type_id') is-invalid @enderror" name="model_type_id" id="model_type_id">
+                                <select class="form-select" name="model_type_id" id="model_type_id">
                                     <option value="">Select Model</option>
-                                    <option value="1" {{ old('model_type_id') == 1 ? 'selected' : '' }}>iPhone 15 Pro Max</option>
-                                    <option value="2" {{ old('model_type_id') == 2 ? 'selected' : '' }}>iPhone 14 Pro</option>
-                                    <option value="3" {{ old('model_type_id') == 3 ? 'selected' : '' }}>Galaxy S24 Ultra</option>
+
+                                    @foreach($models as $model)
+                                        <option value="{{ $model['id'] }}" {{ old('model_type_id') == $model['id'] ? 'selected' : '' }}>
+                                            {{ $model['name'] }}
+                                        </option>
+                                    @endforeach
                                 </select>
                                 @error('model_type_id')
                                     <span class="invalid-feedback">
@@ -134,12 +131,14 @@
 
                             <div class="mb-3 col-md-6">
                                 <label class="form-label" for="color">Color</label>
-                                <select class="form-select @error('color_id') is-invalid @enderror" name="color_id" id="color_id">
+                                <select class="form-select" name="color_id" id="color_id">
                                     <option value="" disabled selected>Select Color</option>
-                                    <option value="1" @if(old('color_id') == 1) selected @endif>Black</option>
-                                    <option value="2" @if(old('color_id') == 2) selected @endif>White</option>
-                                    <option value="3" @if(old('color_id') == 3) selected @endif>Blue</option>
-                                    <option value="4" @if(old('color_id') == 4) selected @endif>Red</option>
+
+                                    @foreach($colors as $color)
+                                        <option value="{{ $color['id'] }}" {{ old('color_id') == $color['id'] ? 'selected' : '' }}>
+                                            {{ $color['name'] }}
+                                        </option>
+                                    @endforeach
                                 </select>
                                 @error('color')
                                     <span class="invalid-feedback" role="alert">
@@ -150,15 +149,16 @@
                             
                             <div class="mb-3 col-md-6">
                                 <label class="form-label" for="storage">Storage</label>
-                                <select class="form-select @error('storage_id') is-invalid @enderror" name="storage_id" id="storage_id">
+                                <select class="form-select" name="storage_id" id="storage_id">
                                     <option value="" disabled selected>Select Storage</option>
-                                    <option value="1" @if(old('storage_id') == 1) selected @endif>32GB</option>
-                                    <option value="2" @if(old('storage_id') == 2) selected @endif>64GB</option>
-                                    <option value="3" @if(old('storage_id') == 3) selected @endif>128GB</option>
-                                    <option value="4" @if(old('storage_id') == 4) selected @endif>256GB</option>
-                                    <option value="5" @if(old('storage_id') == 5) selected @endif>512GB</option>
+
+                                    @foreach($storages as $storage)
+                                        <option value="{{ $storage['id'] }}" {{ old('storage_id') == $storage['id'] ? 'selected' : '' }}>
+                                            {{ $storage['name'] }}
+                                        </option>
+                                    @endforeach
                                 </select>
-                                @error('storage')
+                                @error('storage')o
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -167,12 +167,14 @@
 
                             <div class="mb-3 col-md-6">
                                 <label class="form-label" for="type_of_machine">Type of Machine</label>
-                                <select class="form-select @error('type_of_machine') is-invalid @enderror" name="type_of_machine" id="type_of_machine">
+                                <select class="form-select" name="type_of_machine" id="type_of_machine">
                                     <option value="" disabled selected>Select Type</option>
-                                    <option value="smartphone" @if(old('type_of_machine') == 'smartphone') selected @endif>Smartphone</option>
-                                    <option value="tablet" @if(old('type_of_machine') == 'tablet') selected @endif>Tablet</option>
-                                    <option value="laptop" @if(old('type_of_machine') == 'laptop') selected @endif>Laptop</option>
-                                    <option value="watch" @if(old('type_of_machine') == 'watch') selected @endif>Smart Watch</option>
+
+                                    @foreach($types as $type)
+                                        <option value="{{ $type['value'] }}" {{ old('type_of_machine') == $type['value'] ? 'selected' : '' }}>
+                                            {{ $type['name'] }}
+                                        </option>
+                                    @endforeach
                                 </select>
                                 @error('type_of_machine')
                                     <span class="invalid-feedback" role="alert">
@@ -183,12 +185,14 @@
 
                             <div class="mb-3 col-md-6">
                                 <label class="form-label" for="network">Lock By</label>
-                                <select class="form-select @error('network') is-invalid @enderror" name="network" id="network">
+                                <select class="form-select" name="network" id="network">
                                     <option value="" disabled selected>Select Lock Status</option>
-                                    <option value="unlocked" @if(old('network') == 'unlocked') selected @endif>Unlocked</option>
-                                    <option value="carrier" @if(old('network') == 'carrier') selected @endif>Carrier Locked</option>
-                                    <option value="icloud" @if(old('network') == 'icloud') selected @endif>iCloud Locked</option>
-                                    <option value="google" @if(old('network') == 'google') selected @endif>Google Locked</option>
+
+                                    @foreach($networks as $network)
+                                        <option value="{{ $network['value'] }}" {{ old('network') == $network['value'] ? 'selected' : '' }}>
+                                            {{ $network['name'] }}
+                                        </option>
+                                    @endforeach
                                 </select>
                                 @error('network')
                                     <span class="invalid-feedback" role="alert">
@@ -261,12 +265,14 @@
 
                             <div class="mb-3 col-md-6">
                                 <label class="form-label" for="status">Product Status</label>
-                                <select class="form-select @error('status') is-invalid @enderror" name="status" id="status">
+                                <select class="form-select" name="status" id="status">
                                     <option value="" disabled selected>Select Status</option>
-                                    <option value="1" @if(old('status') == 1) selected @endif>Available</option>
-                                    <option value="2" @if(old('status') == 2) selected @endif>Sold</option>
-                                    <option value="3" @if(old('status') == 3) selected @endif>Broken</option>
-                                    <option value="4" @if(old('status') == 4) selected @endif>Loan</option>
+
+                                    @foreach($statuses as $status)
+                                        <option value="{{ $status['value'] }}" {{ old('status') == $status['value'] ? 'selected' : '' }}>
+                                            {{ $status['name'] }}
+                                        </option>
+                                    @endforeach
                                 </select>
                                 @error('status')
                                     <span class="invalid-feedback" role="alert">

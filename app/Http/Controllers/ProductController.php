@@ -97,14 +97,16 @@ class ProductController extends Controller
       $product = new Product();
       $product->product_code = $request->product_code ?? '';
       $product->product_name = $request->product_name;
+      // dd('$request->product_name');
       $product->product_imei = $request->product_imei;
-      $product->brand_id = $request->brand;
-      $product->series_id = $request->series;
-      $product->color_id = $request->color;
-      $product->model_type_id = $request->model_type;
+      $product->brand_id = $request->brand_id;
+      $product->series_id = $request->series_id;
+      $product->color_id = $request->color_id;
       $product->condition = $request->condition;
-      $product->storage_id = $request->storage;
-      $product->type_of_machine = $request->type_of_machine;
+      $product->storage_id = $request->storage_id;
+      $product->model_type_id = $request->model_type_id;
+      // dd('$request->model_type_id');
+
       $product->network_id = $request->network;
       $product->battery_percentage = $request->battery_percentage;
       $product->percentage = $request->percentage;
@@ -114,6 +116,7 @@ class ProductController extends Controller
       $product->purchase_date = $request->purchase_date;
       $product->image = '';
       $product->status = $request->status;
+      $product->type_of_machine = $request->type_of_machine;
       $product->note = $request->note ?? '';
 
       $product->save();
@@ -127,7 +130,7 @@ class ProductController extends Controller
         $product->save();
       }
        // Optionally, you can return a response to indicate success or redirect to a different page.
-      return redirect()->route('products.show', withLang(['product' => $product->id]));
+      return redirect()->route('products.index', withLang(['product' => $product->id]));
     }
 
     /**
