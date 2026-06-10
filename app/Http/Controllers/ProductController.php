@@ -124,7 +124,6 @@ class ProductController extends Controller
       $product->product_name = $request->product_name;
       $product->product_imei = $request->product_imei;
       
-      // FIXED: Adjusted from request field names (brand_id, series_id, etc.)
       $product->brand_id = $request->brand_id;
       $product->series_id = $request->series_id;
       $product->color_id = $request->color_id;
