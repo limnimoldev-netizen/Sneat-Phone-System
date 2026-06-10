@@ -136,8 +136,7 @@
                     Product Lists
                 </a>
                 @can('product-edit')
-                    <a href="{{ route('products.edit', withLang(['product' => $product->id])) }}" class="btn btn-primary">
-                        Edit
+<a href="{{ route('products.edit', withLang(['id' => $product->id])) }}" class="btn btn-primary">                          Edit
                     </a>
                 @endcan
             </div>

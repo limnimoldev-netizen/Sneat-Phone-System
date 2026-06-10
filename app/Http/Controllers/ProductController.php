@@ -136,19 +136,28 @@ class ProductController extends Controller
      */
     public function show(string $lang, Product $product)
     {
+        $product = $product->with('brand', 'series', 'color', 'modelType', 'storage')->findOrfail($product->id);
+
       
-      $product = $product->with('brand', 'series', 'color', 'modelType', 'storage')->findOrfail($product->id);
-      dd(['product' => $product]);
-      return view('products.show', ['product' => $product]);
+        $product->load(
+        'brand',
+        'series',
+        'color',
+        'modelType',
+        'storage'
+    );  
+
+        return view('products.show', compact('product'), ['product' => $product]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $lang, Product $product)
+    public function edit(string $lang, Product $product, $id)
     {
-      
-      return view('products.edit');
+      $product=Product::findOrfail($id);
+      // dd($product);
+      return view('products.edit', compact('product'));
     
     }
 
