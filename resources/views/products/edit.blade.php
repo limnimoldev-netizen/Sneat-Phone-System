@@ -194,7 +194,7 @@
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label" for="battery_percentage">Battery Percentage</label>
                                     <div class="input-group input-group-merge">
-                                        <input type="number" class="form-control @error('battery_percentage') is-invalid @enderror" id="battery_percentage" name="battery_percentage" value="{{ old('battery_percentage', $product->battery_percentage) }}" min="0" max="100">
+                                        <input  class="form-control @error('battery_percentage') is-invalid @enderror" id="battery_percentage" name="battery_percentage" value="{{ old('battery_percentage', $product->battery_percentage) }}" min="0" max="100">
                                         <span class="input-group-text">%</span>
                                     </div>
                                     @error('battery_percentage')
