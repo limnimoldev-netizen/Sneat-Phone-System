@@ -158,29 +158,77 @@ class ProductController extends Controller
       return redirect()->route('products.index', withLang(['product' => $product->id]));
     }
 
+
     /**
      * Display the specified resource.
      */
     public function show(string $lang, Product $product)
     {
-      $product = $product->with('brand', 'series', 'color', 'modelType', 'storage')->findOrfail($product->id);
-      return view('products.show', ['product' => $product]);
+        $product = $product->with('brand', 'series', 'color', 'modelType', 'storage')->findOrfail($product->id);
+
+      
+        $product->load(
+        'brand',
+        'series',
+        'color',
+        'modelType',
+        'storage'
+    );  
+
+        return view('products.show', compact('product'), ['product' => $product]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $lang, Product $product)
+    public function edit(string $lang, Product $product, $id)
     {
-      
+      $product=Product::findOrfail($id);
+      return view('products.edit', compact('product'));
+
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(ProductRequest $request, string $lang, Product $product)
+    public function update(ProductRequest $request, string $lang, string $id)
+
     {
-      
+        $product = Product::findOrFail($id);
+
+        $product->product_code = $request->product_code ?? '';
+        $product->product_name = $request->product_name;
+        $product->product_imei = $request->product_imei;
+        $product->brand_id = $request->brand_id;
+        $product->series_id = $request->series_id;
+        $product->color_id = $request->color_id;
+        $product->condition = $request->condition;
+        $product->storage_id = $request->storage_id;
+        $product->model_type_id = $request->model_type_id;
+        $product->network_id = $request->network_id;
+        $product->battery_percentage = $request->battery_percentage;
+        $product->percentage = $request->percentage;
+        $product->purchase_price = $request->purchase_price;
+        $product->selling_price = $request->selling_price;
+        $product->purchase_date = $request->purchase_date;
+        $product->status = $request->status;
+        $product->type_of_machine = $request->type_of_machine;
+        $product->note = $request->note ?? '';
+
+        
+        $product->save();
+        
+        if ($image = $request->file('image')) {
+            $destinationPath = 'images/product/';
+            $formattedNumber = str_pad($product->id, 5, '0', STR_PAD_LEFT);
+            $filename = $image->getClientOriginalName();
+            $productImage = $formattedNumber . "_" . md5($filename . time()) . "." . $image->getClientOriginalExtension();
+            $image->move($destinationPath, $productImage);
+            $product->image = $productImage;
+            $product->save();
+        }
+
+        return redirect()->route('products.index', withLang())->with('success', 'Product updated successfully.');
     }
 
     public function getSeriesBybrand(string $lang, string $id)
@@ -210,5 +258,7 @@ class ProductController extends Controller
     $product->delete();
     return redirect()->route('products.index', withLang());
   }
+
+
 
 }
