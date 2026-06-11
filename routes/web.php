@@ -89,15 +89,6 @@ Route::group([
 
     });
 
-    // Route::group(['prefix' => 'product', 'as' => 'products.'], function () {
-    //     Route::get('/',                     [ProductController::class, 'index'])->name('index');
-    //     Route::get('/create',               [ProductController::class, 'create'])->name('create');
-    //     Route::post('/store',               [ProductController::class, 'store'])->name('store');
-    //     Route::get('/show/{product}',       [ProductController::class, 'show'])->name('show');
-    //     Route::get('/edit/{product}',       [ProductController::class, 'edit'])->name('edit');
-    //     Route::put('/update/{product}',     [ProductController::class, 'update'])->name('update');
-    //     Route::delete('/destroy/{product}', [ProductController::class, 'destroy'])->name('destroy');
-    // });
       
     Route::group(['prefix'=>'user','as'=>'users.'], function(){
         Route::get('/', [EmployeeController::class, 'index'])->name('index');
@@ -112,26 +103,25 @@ Route::group([
         Route::post('/profile/update/password', [UserController::class, 'updatePassword'])->name('update.profile.password');
     });
     
-    Route::group(['prefix'=>'order','as'=>'orders.'], function(){
-      Route::get('/create', [OrderController::class, 'index'])->name('create');
-      Route::get('/', [OrderController::class, 'index'])->name('index');
-    });
-    Route::group(['prefix'=>'sale','as'=>'sales.'], function(){
-      Route::get('/create', [OrderController::class, 'index'])->name('create');
-      Route::get('/', [OrderController::class, 'index'])->name('index');
-     
-    });
 
+    
+    Route::group(['prefix'=>'order','as'=>'orders.'], function(){
+      Route::get('/', [OrderController::class, 'index'])->name('index');
+      Route::get('/create', [OrderController::class, 'createOrder'])->name('create'); 
+
+    });
 
     Route::group(['prefix'=>'sale','as'=>'sales.'], function(){
         Route::get('/', [OrderController::class, 'index'])->name('index');
-        Route::get('/create', [OrderController::class, 'create'])->name('create');
-        Route::post('/store', [OrderController::class, 'store'])->name('store');
-        Route::get('/show/{id}', [OrderController::class, 'show'])->name('show');
-        Route::get('/edit/{id}', [OrderController::class, 'edit'])->name('edit');
-        Route::put('/update/{id}', [OrderController::class, 'update'])->name('update');
-        Route::delete('/destroy/{id}', [OrderController::class, 'destroy'])->name('destroy');
+        Route::get('/create', [OrderController::class, 'createSale'])->name('create');
+        Route::post('/store', [OrderController::class, 'storeSale'])->name('store');
+        Route::get('/show/{id}', [OrderController::class, 'showSale'])->name('show');
+        Route::get('/edit/{id}', [OrderController::class, 'editSale'])->name('edit');
+        Route::put('/update/{id}', [OrderController::class, 'updateSale'])->name('update');
+        Route::delete('/destroy/{id}', [OrderController::class, 'destroySale'])->name('destroy');
     });
+
+
   
     Route::group(['prefix'=>'cart','as'=>'carts.'], function(){
       Route::post('/store', [CartController::class, 'store'])->name('store');

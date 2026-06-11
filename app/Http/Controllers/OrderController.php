@@ -79,14 +79,23 @@ class OrderController extends Controller
 
    // add function by nimol add sale
 
-    public function create()
+    public function createOrder()
+    {
+        $products  = Product::all();
+        $customers = Customer::all();
+
+        return view('orders.createOrder', compact('products', 'customers'));
+    }
+    
+
+    public function createSale()
     {
         $products  = Product::all();
         $customers = Customer::all();
 
         return view('orders.create', compact('products', 'customers'));
     }
-    
+
 
     // Save the order to database
     public function store(Request $request)
@@ -105,9 +114,9 @@ class OrderController extends Controller
             'total_amount'   => $total,
             'order_date'     => $request->input('order_date'),
             'note'           => $request->input('note'),
-            'payment_status' => 1,
-            'payment_type'   => 1,
-            'status'         => 1,
+            'payment_status' => $request->input('payment_status'),
+            'payment_type'   => $request->input('payment_type'),
+            'status'         => $request->input('satus'),
         ]);
 
         // Save each product as order item
