@@ -114,9 +114,9 @@ class OrderController extends Controller
             'total_amount'   => $total,
             'order_date'     => $request->input('order_date'),
             'note'           => $request->input('note'),
-            'payment_status' => $request->input('payment_status'),
-            'payment_type'   => $request->input('payment_type'),
-            'status'         => $request->input('satus'),
+            'payment_status' => $request->input('payment_status') ?: 0, 
+            'payment_type' => $request->input('payment_type') ?: 1,
+            'status'         => $request->input('status') ?: 0,
         ]);
 
         // Save each product as order item

@@ -5,6 +5,6 @@
 @section('content')
 
 
-<h1>heloe Hellodhfhsfhjjsdfjj</h1>
+<h1>heloe Hello q</h1>
 
 @endsection

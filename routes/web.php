@@ -114,12 +114,12 @@ Route::group([
     Route::group(['prefix'=>'sale','as'=>'sales.'], function(){
         Route::get('/', [OrderController::class, 'index'])->name('index');
         Route::get('/create', [OrderController::class, 'createSale'])->name('create');
-        Route::post('/store', [OrderController::class, 'storeSale'])->name('store');
+        Route::post('/store', [OrderController::class, 'store'])->name('store');
         Route::get('/show/{id}', [OrderController::class, 'showSale'])->name('show');
         Route::get('/edit/{id}', [OrderController::class, 'editSale'])->name('edit');
         Route::put('/update/{id}', [OrderController::class, 'updateSale'])->name('update');
         Route::delete('/destroy/{id}', [OrderController::class, 'destroySale'])->name('destroy');
-    });
+    }); 
 
 
   
