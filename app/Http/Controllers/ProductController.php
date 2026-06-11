@@ -214,6 +214,8 @@ class ProductController extends Controller
         $product->status = $request->status;
         $product->type_of_machine = $request->type_of_machine;
         $product->note = $request->note ?? '';
+
+        
         $product->save();
         
         if ($image = $request->file('image')) {
