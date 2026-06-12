@@ -8,7 +8,7 @@
     <div class="container-fluid flex-grow-1 container-p-y">
         <div class="row">
             <div class="col-md-12">
-                <form id="formProductRegister" method="POST" action="{{ route('products.update', array_merge(is_array(withLang()) ? withLang() : ['lang' => withLang()], ['id' => $product->id])) }}" enctype="multipart/form-data">
+                <form id="formProductRegister" method="POST" action="{{ route('products.update', [request()->lang, $product->id]) }}">
                     @csrf
                     @method('PUT')
                     
