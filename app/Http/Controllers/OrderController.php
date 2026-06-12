@@ -123,7 +123,7 @@ class OrderController extends Controller
             OrderDetail::create([
                 'order_id'   => $order->id,
                 'product_id' => $item['id'],
-                'unit_price' => $item['price'], 
+                'unit_price' => $item['price'] ?? 0,
                 'price'      => $item['price'],
             ]);
         }
@@ -134,11 +134,12 @@ class OrderController extends Controller
     }
 
     // add by nimol
-    public function showSale($id)
+    public function showSale($lang, $id)
     {
-        return view('orders.showSale', compact('id'));
+        $sale = Order::findOrFail($id);
+        return view('orders.showSale', compact('id', 'sale'));
     }
-
+    
 
      /**
      * Display the specified resource.
