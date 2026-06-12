@@ -78,7 +78,6 @@ class OrderController extends Controller
 
 
    // add function by nimol add sale
-
     public function createOrder()
     {
         $products  = Product::all();
@@ -87,6 +86,7 @@ class OrderController extends Controller
         return view('orders.createOrder', compact('products', 'customers'));
     }
     
+    //add by  nimol
 
     public function createSale()
     {
@@ -96,7 +96,7 @@ class OrderController extends Controller
         return view('orders.create', compact('products', 'customers'));
     }
 
-
+    //add by  nimol
     // Save the order to database
     public function store(Request $request)
     {
@@ -106,7 +106,6 @@ class OrderController extends Controller
         $products     = json_decode($request->input('products'), true); // comes from hidden input
         $total        = collect($products)->sum('price');
 
-        // Save order
        
         $order = Order::create([
             'customer_id'    => $request->input('customer_id') ?: 1, 
@@ -134,7 +133,11 @@ class OrderController extends Controller
 
     }
 
-    
+    // add by nimol
+    public function showSale($id)
+    {
+        return view('orders.showSale', compact('id'));
+    }
 
 
      /**
