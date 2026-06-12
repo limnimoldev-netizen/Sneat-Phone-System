@@ -96,7 +96,6 @@ class OrderController extends Controller
         return view('orders.create', compact('products', 'customers'));
     }
 
-    //add by  nimol
     // Save the order to database
     public function store(Request $request)
     {
