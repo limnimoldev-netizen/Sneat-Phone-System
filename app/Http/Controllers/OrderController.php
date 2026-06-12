@@ -78,16 +78,25 @@ class OrderController extends Controller
 
 
    // add function by nimol add sale
+    public function createOrder()
+    {
+        $products  = Product::all();
+        $customers = Customer::all();
 
-    public function create()
+        return view('orders.createOrder', compact('products', 'customers'));
+    }
+    
+    //add by  nimol
+
+    public function createSale()
     {
         $products  = Product::all();
         $customers = Customer::all();
 
         return view('orders.create', compact('products', 'customers'));
     }
-    
 
+    //add by  nimol
     // Save the order to database
     public function store(Request $request)
     {
@@ -97,7 +106,6 @@ class OrderController extends Controller
         $products     = json_decode($request->input('products'), true); // comes from hidden input
         $total        = collect($products)->sum('price');
 
-        // Save order
        
         $order = Order::create([
             'customer_id'    => $request->input('customer_id') ?: 1, 
@@ -105,9 +113,9 @@ class OrderController extends Controller
             'total_amount'   => $total,
             'order_date'     => $request->input('order_date'),
             'note'           => $request->input('note'),
-            'payment_status' => 1,
-            'payment_type'   => 1,
-            'status'         => 1,
+            'payment_status' => $request->input('payment_status') ?: 0, 
+            'payment_type' => $request->input('payment_type') ?: 1,
+            'status'         => $request->input('status') ?: 0,
         ]);
 
         // Save each product as order item
@@ -115,7 +123,7 @@ class OrderController extends Controller
             OrderDetail::create([
                 'order_id'   => $order->id,
                 'product_id' => $item['id'],
-                'unit_price' => $item['price'], 
+                'unit_price' => $item['price'] ?? 0,
                 'price'      => $item['price'],
             ]);
         }
@@ -125,8 +133,13 @@ class OrderController extends Controller
 
     }
 
+    // add by nimol
+    public function showSale($lang, $id)
+    {
+        $sale = Order::findOrFail($id);
+        return view('orders.showSale', compact('id', 'sale'));
+    }
     
-
 
      /**
      * Display the specified resource.
