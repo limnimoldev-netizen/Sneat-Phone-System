@@ -183,9 +183,7 @@ class ProductController extends Controller
      */
     public function edit(string $lang, Product $product, $id)
     {
-      $product=Product::findOrfail($id);
-      return view('products.edit', compact('product'));
-
+      return view('products.edit', ['product' => $product]);
     }
 
     /**
