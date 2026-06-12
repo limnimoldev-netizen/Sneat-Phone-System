@@ -132,7 +132,7 @@ class EmployeeController extends Controller
         return redirect()->route('users.index', withLang())->with('success', 'Branch soft deleted successfully');
     }
 
-    public function editPassword($lang, $id)
+    public function editPassword($lang,$id)
     {
         $user = User::with('employee')->findOrfail($id);
         return view('employees.edit-password', [
@@ -148,6 +148,6 @@ class EmployeeController extends Controller
         $user = User::findOrfail($id);
         $user->password = Hash::make($request->new_password);
         $user->save();
-        return redirect()->route('users.edit.password', withLang(['id' => $user->id]))->with('success', 'Password updated successfully');
+        return redirect()->route('users.edit.update', withLang(['id' => $user->id]))->with('success', 'Password updated successfully');
     }
 }
