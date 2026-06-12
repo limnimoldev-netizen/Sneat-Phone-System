@@ -4,7 +4,7 @@
 
 @section('content')
 <!-- Content -->
-<div class="container-fluid flex-grow-1 container-p-y">
+<div class="container-fluid  container-p-y">
     <div class="row">
         <div class="col-lg-12 mb-3">
             <div class="pull-right">
@@ -48,11 +48,11 @@
                           <td>{!! '<span class="badge bg-label-info">'.setToStringDateFormat($order->order_date).'</span>'!!}</td>
                           <td>
                               @can('order-list')
-                                <a href="{{ route('sales.show', withLang(['order' => $order->id])) }}" class="btn btn-icon btn-outline-secondary">
+                                <a href="{{ route('sales.show', ['lang' => app()->getLocale(), 'id' => $order->id]) }}" class="btn btn-icon btn-outline-secondary">
                                     <span class="tf-icons bx bx-detail"></span>
                                 </a>
                               @endcan
-                                <form method="POST" action="{{ route('sales.destroy', withLang(['order' => $order->id])) }}" class="d-inline">
+                                <form method="POST" action="{{ route('sales.destroy', ['lang' => app()->getLocale(), 'id' => $order->id]) }}" class="d-inline">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-icon btn-outline-danger" onclick="return confirm('Are you sure you want to delete this sale?')">

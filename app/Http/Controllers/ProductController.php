@@ -85,8 +85,33 @@ class ProductController extends Controller
      */
     public function create()
     {
-      return view('products.create');
-      
+
+    //get lists from database for dropdown menus (ID and Name only)
+      $brands = Brand::pluck('name', 'id');  
+      $series = Series::pluck('name', 'id');
+      $colors = Color::pluck('name', 'id');
+      $modelTypes = ModelType::pluck('name', 'id');
+      $storage = Storage::pluck('name', 'id');
+      $networks = Network::pluck('name', 'id');
+
+// get fixed options from the Product model
+      $type_of_machines = Product::TYPE_OF_MACHINE;  // e.g., Phone, Laptop
+      $conditions = Product::CONDITION;           // e.g., New, Used
+      $status = Product::getStatuses();       // e.g., Active, Draft
+
+
+      // Load the HTML form and send all the data to it
+      return view('products.create', compact(
+          'brands', 
+          'series', 
+          'colors', 
+          'modelTypes', 
+          'storage', 
+          'networks', 
+          'type_of_machines', 
+          'conditions', 
+          'status'
+      ));
     }
 
     /**
@@ -98,14 +123,15 @@ class ProductController extends Controller
       $product->product_code = $request->product_code ?? '';
       $product->product_name = $request->product_name;
       $product->product_imei = $request->product_imei;
-      $product->brand_id = $request->brand;
-      $product->series_id = $request->series;
-      $product->color_id = $request->color;
-      $product->model_type_id = $request->model_type;
+      
+      $product->brand_id = $request->brand_id;
+      $product->series_id = $request->series_id;
+      $product->color_id = $request->color_id;
       $product->condition = $request->condition;
-      $product->storage_id = $request->storage;
-      $product->type_of_machine = $request->type_of_machine;
-      $product->network_id = $request->network;
+      $product->storage_id = $request->storage_id;
+      $product->model_type_id = $request->model_type_id;
+
+      $product->network_id = $request->network_id;
       $product->battery_percentage = $request->battery_percentage;
       $product->percentage = $request->percentage;
       $product->purchase_price = $request->purchase_price;
@@ -114,9 +140,11 @@ class ProductController extends Controller
       $product->purchase_date = $request->purchase_date;
       $product->image = '';
       $product->status = $request->status;
+      $product->type_of_machine = $request->type_of_machine;
       $product->note = $request->note ?? '';
 
       $product->save();
+      
       if ($image = $request->file('image')) {
         $destinationPath = 'images/product/';
         $formattedNumber = str_pad($product->id, 5, '0', STR_PAD_LEFT);
@@ -126,23 +154,34 @@ class ProductController extends Controller
         $product->image = $productImage;
         $product->save();
       }
-       // Optionally, you can return a response to indicate success or redirect to a different page.
-      return redirect()->route('products.show', withLang(['product' => $product->id]));
+
+      return redirect()->route('products.index', withLang(['product' => $product->id]));
     }
+
 
     /**
      * Display the specified resource.
      */
     public function show(string $lang, Product $product)
     {
-      $product = $product->with('brand', 'series', 'color', 'modelType', 'storage')->findOrfail($product->id);
-      return view('products.show', ['product' => $product]);
+        $product = $product->with('brand', 'series', 'color', 'modelType', 'storage')->findOrfail($product->id);
+
+      
+        $product->load(
+        'brand',
+        'series',
+        'color',
+        'modelType',
+        'storage'
+    );  
+
+        return view('products.show', compact('product'), ['product' => $product]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $lang, Product $product)
+    public function edit(string $lang, Product $product, $id)
     {
       return view('products.edit', ['product' => $product]);
     }
@@ -150,9 +189,44 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(ProductRequest $request, string $lang, Product $product)
+    public function update(ProductRequest $request, string $lang, string $id)
+
     {
-      
+        $product = Product::findOrFail($id);
+
+        $product->product_code = $request->product_code ?? '';
+        $product->product_name = $request->product_name;
+        $product->product_imei = $request->product_imei;
+        $product->brand_id = $request->brand_id;
+        $product->series_id = $request->series_id;
+        $product->color_id = $request->color_id;
+        $product->condition = $request->condition;
+        $product->storage_id = $request->storage_id;
+        $product->model_type_id = $request->model_type_id;
+        $product->network_id = $request->network_id;
+        $product->battery_percentage = $request->battery_percentage;
+        $product->percentage = $request->percentage;
+        $product->purchase_price = $request->purchase_price;
+        $product->selling_price = $request->selling_price;
+        $product->purchase_date = $request->purchase_date;
+        $product->status = $request->status;
+        $product->type_of_machine = $request->type_of_machine;
+        $product->note = $request->note ?? '';
+
+        
+        $product->save();
+        
+        if ($image = $request->file('image')) {
+            $destinationPath = 'images/product/';
+            $formattedNumber = str_pad($product->id, 5, '0', STR_PAD_LEFT);
+            $filename = $image->getClientOriginalName();
+            $productImage = $formattedNumber . "_" . md5($filename . time()) . "." . $image->getClientOriginalExtension();
+            $image->move($destinationPath, $productImage);
+            $product->image = $productImage;
+            $product->save();
+        }
+
+        return redirect()->route('products.index', withLang())->with('success', 'Product updated successfully.');
     }
 
     public function getSeriesBybrand(string $lang, string $id)
@@ -182,5 +256,7 @@ class ProductController extends Controller
     $product->delete();
     return redirect()->route('products.index', withLang());
   }
+
+
 
 }
