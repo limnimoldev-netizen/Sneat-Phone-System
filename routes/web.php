@@ -117,7 +117,7 @@ Route::group([
         Route::get('/show/{id}', [OrderController::class, 'showSale'])->name('show');
         Route::get('/edit/{id}', [OrderController::class, 'editSale'])->name('edit');
         Route::put('/update/{id}', [OrderController::class, 'updateSale'])->name('update');
-        Route::delete('/destroy/{id}', [OrderController::class, 'destroySale'])->name('destroy');
+        Route::delete('/destroy/{id}', [OrderController::class, 'destroy'])->name('destroy');
     }); 
 
 

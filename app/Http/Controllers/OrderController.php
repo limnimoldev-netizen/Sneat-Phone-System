@@ -78,9 +78,17 @@ class OrderController extends Controller
 
 
    // add function by nimol add sale
-    public function createOrder()
+    public function createOrder(Request $request)
     {
-        $products  = Product::all();
+        $query = Product::query();
+
+        // If a brand button is clicked, filter products
+        if ($request->has('brand') && $request->brand != 'all') {
+            $query->whereHas('brand', function($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->brand . '%');
+            });
+        }
+        $products  = $query->get();
         $customers = Customer::all();
 
         return view('orders.createOrder', compact('products', 'customers'));
@@ -88,9 +96,18 @@ class OrderController extends Controller
     
     //add by  nimol
 
-    public function createSale()
+    public function createSale(Request $request)
     {
-        $products  = Product::all();
+
+    $query = Product::query();
+
+        // If a brand button is clicked, filter products
+        if ($request->has('brand') && $request->brand != 'all') {
+            $query->whereHas('brand', function($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->brand . '%');
+            });
+        }
+        $products  = $query->get();
         $customers = Customer::all();
 
         return view('orders.create', compact('products', 'customers'));
@@ -103,12 +120,13 @@ class OrderController extends Controller
         $customer_id  = $request->input('customer_id');
         $order_date   = $request->input('order_date');
         $note         = $request->input('note');
-        $products     = json_decode($request->input('products'), true); // comes from hidden input
+        
+        $products     = json_decode($request->input('products'), true) ?: []; 
         $total        = collect($products)->sum('price');
 
        
         $order = Order::create([
-            'customer_id'    => $request->input('customer_id') ?: 1, 
+            'customer_id'    => $customer_id ?: 1,
             'employee_id'    => auth()->id(),
             'total_amount'   => $total,
             'order_date'     => $request->input('order_date'),
@@ -124,7 +142,7 @@ class OrderController extends Controller
                 'order_id'   => $order->id,
                 'product_id' => $item['id'],
                 'unit_price' => $item['price'] ?? 0,
-                'price'      => $item['price'],
+                'price'      => $item['price'] ,
             ]);
         }
 
