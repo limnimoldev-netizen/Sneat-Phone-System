@@ -32,6 +32,47 @@ class LoanController extends Controller
     public function index(Request $request)
     {
         $query = Loan::query();
+
+      // add code for index loans list
+
+        $parameterNames = $request->only([
+            'search_loan',
+            'customer',
+            'from_date',
+            'to_date'
+        ]);
+
+        if ($request->search) {
+            if (!empty($parameterNames['search_loan'])) {
+                $searchLoan = $parameterNames['search_loan'];
+                $query->where(function ($query) use ($searchLoan) {
+                    $query->whereHas('customer', function ($customerQuery) use ($searchLoan) {
+                        $customerQuery->where('name', 'like', '%' . $searchLoan . '%');
+                    })
+                    ->orWhereHas('product', function ($productQuery) use ($searchLoan) {
+                        $productQuery->where('product_imei', 'like', '%' . $searchLoan . '%');
+                    })
+                    ->orWhereRaw("LPAD(loans.id, 5, '0') like ?", ['%' . $searchLoan . '%']);
+                });
+            }
+
+            if (!empty($parameterNames['customer'])) {
+                $query->where('customer_id', $parameterNames['customer']);
+            }
+
+            if (!empty($parameterNames['from_date']) && !empty($parameterNames['to_date'])) {
+                $query->whereBetween('date', [
+                    $parameterNames['from_date'],
+                    $parameterNames['to_date']
+                ]);
+            }
+        }
+
+        $loans = $query->latest()->paginate(10);
+
+        $customers = Customer::pluck('name', 'id');
+
+        return view('loans.index', compact('loans', 'customers', 'parameterNames'));
     }
 
     /**
