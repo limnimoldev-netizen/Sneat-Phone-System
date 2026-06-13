@@ -232,7 +232,7 @@ class LoanPaymentController extends Controller
 
         }
         $loans = $query->orderBy('date', 'desc')->paginate(20);
-        return view('loans.payments.late-list', compact('loans', 'customers', 'parameterNames'));
+        return view('loans.payments.late-list', compact('loans' , 'customers', 'parameterNames'));
     }
 
     public function invoice(Request $request, string $lang, LoanPayment $loanPayment)
