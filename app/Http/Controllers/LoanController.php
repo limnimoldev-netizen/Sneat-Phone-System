@@ -153,7 +153,7 @@ class LoanController extends Controller
         $data['phone_profit'] = $soldPrice - $purchasedPrice;
 
         // create and save the loan record in the database in one single step.
-        $loan = Loan::create($data);
+        $loan = Loan::create($data);   
 
         if ($file = $request->file('file')) {
           $zipFileName = $this->uploadFileZip($loan, $file );

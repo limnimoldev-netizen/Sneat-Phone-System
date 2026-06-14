@@ -59,7 +59,7 @@
                     @if(count($products) > 0)
                         @foreach($products as $product)
                             <div class="col-md-3"> 
-                                <div class=" gap-4 "
+                                <div class="product-card gap-4"
                                     style="cursor:pointer; border-radius: 6px; background: #fff;"
                                     data-id="{{ $product->id }}"
                                     data-name="{{ $product->product_name }}"
@@ -153,3 +153,191 @@
     </div>
 </form>
 @endsection
+
+<script>
+
+// Wait until the whole HTML page is loaded
+document.addEventListener('DOMContentLoaded', function () {
+
+    // Create an empty cart array to store selected products
+    let cart = [];
+
+    // FUNCTION: Update Cart UI
+    function updateCart() {
+
+        // Get the container where selected products will be displayed
+        const container = document.getElementById('orderItems');
+
+        // Check if cart is empty
+        if (cart.length === 0) {
+
+            // Show empty cart message
+            container.innerHTML = `
+                <div class="text-center text-muted py-5">
+                    <i class="bx bx-cart fs-1"></i>
+                    <p class="mt-2 mb-0">No items selected</p>
+                </div>
+            `;
+
+            // Set total price to 0
+            document.getElementById('orderTotal').textContent = '0.00';
+
+            // Send empty array to Laravel
+            document.getElementById('hiddenProductsInput').value = '[]';
+
+            // Stop function here
+            return;
+        }
+
+        // Variable to calculate total price
+        let total = 0;
+
+        // Loop through all items in cart
+        container.innerHTML = cart.map((item, index) => {
+
+            // Add current item price to total
+            total += parseFloat(item.price);
+
+            // Return HTML for each cart item
+            return `
+                <div class="d-flex align-items-center justify-content-between mb-2 p-2 border rounded bg-light">
+
+                    <div style="max-width: 80%;">
+                        <h6 class="mb-0 text-dark fw-semibold" style="font-size: 12px;">
+                            ${item.name}
+                        </h6>
+
+                        <small class="text-primary fw-bold">
+                            $${parseFloat(item.price).toFixed(2)}
+                        </small>
+                    </div>
+
+                    <!-- Remove button -->
+                    <button
+                        type="button"
+                        class="btn text-danger btn-remove p-0 border-0 bg-transparent"
+                        data-index="${index}">
+
+                        <i class="bx bx-trash fs-5"></i>
+                    </button>
+
+                </div>
+            `;
+        }).join('');
+
+        // Show total amount
+        document.getElementById('orderTotal').textContent = total.toFixed(2);
+
+        // Convert cart array to JSON and send to Laravel
+        document.getElementById('hiddenProductsInput').value = JSON.stringify(cart);
+    }
+
+    // FUNCTION: Add Product
+
+    // Find all product cards
+    document.querySelectorAll('.product-card').forEach(card => {
+
+        // When user clicks a product
+        card.onclick = function () {
+
+            // Get product ID from HTML data-id
+            const id = this.dataset.id;
+
+            // Check if product already exists in cart
+            if (cart.some(item => item.id === id)) {
+
+                // Show warning
+                alert('Already added!');
+
+                // Stop code
+                return;
+            }
+
+            // Add new product into cart
+            cart.push({
+                id: id,
+                name: this.dataset.name,
+                price: this.dataset.price
+            });
+
+            // Refresh cart UI
+            updateCart();
+        };
+    });
+
+
+    // FUNCTION: Remove Product
+    document.getElementById('orderItems').onclick = function (e) {
+
+        // Check if remove button was clicked
+        const btn = e.target.closest('.btn-remove');
+
+        if (btn) {
+
+            // Remove item by index
+            cart.splice(btn.dataset.index, 1);
+
+            // Refresh cart
+            updateCart();
+        }
+    };
+
+
+    // FUNCTION: Clear Order
+    document.getElementById('cancelOrder').onclick = function () {
+
+        // Check if cart has products
+        if (cart.length > 0 && confirm('Clear order?')) {
+
+            // Empty the cart
+            cart = [];
+
+            // Refresh UI
+            updateCart();
+        }
+    };
+
+
+    // FUNCTION: Filter Brand
+    document.querySelectorAll('.btn-filter').forEach(btn => {
+
+        // When user clicks a filter button
+        btn.onclick = function () {
+
+            // Get current URL
+            const url = new URL(window.location.href);
+
+            // If brand = all
+            if (this.dataset.brand === 'all') {
+
+                // Remove brand parameter
+                url.searchParams.delete('brand');
+
+            } else {
+
+                // Add brand parameter
+                url.searchParams.set('brand', this.dataset.brand);
+            }
+
+            // Reload page with new URL
+            window.location.href = url;
+        };
+    });
+
+
+    // FUNCTION: Prevent Empty Submit
+    document.getElementById('posOrderForm').onsubmit = function (e) {
+
+        // Check if cart is empty
+        if (cart.length === 0) {
+
+            // Stop form submission
+            e.preventDefault();
+
+            // Show error message
+            alert('Cart is empty!');
+        }
+    };
+
+});
+</script>
