@@ -253,8 +253,9 @@ class ProductController extends Controller
     }
   }
 
-  public function destroy(string $lang, Product $product)
+  public function destroy(string $lang, string $id)
   {
+    $product = Product::findOrFail($id); 
     $product->delete();
     return redirect()->route('products.index', withLang());
   }

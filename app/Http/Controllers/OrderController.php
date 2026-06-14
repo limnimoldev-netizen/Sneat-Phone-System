@@ -187,9 +187,10 @@ class OrderController extends Controller
         return response()->json(['message' => 'Submiting Order'], 201);
     }
 
-    public function destroy(string $lang, Order $order)
+    public function destroy(string $lang, string $id)
     {
-        $orderDetial = OrderDetail::where('order_id', $order->id)->get();
+        $order = Order::findOrFail($id);
+        $order->delete();
 
       return redirect()->route('sales.index', withLang())->with('success', 'Sale deleted successfully');
     }
