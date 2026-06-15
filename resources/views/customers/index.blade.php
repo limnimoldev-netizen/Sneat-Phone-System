@@ -76,18 +76,7 @@
 
                 </tbody>
                 <tfoot class="table-border-bottom-0">
-                    <tr>
-                        <th></th>
-                        <th>{{__('customer.name')}}</th>
-                        <th>{{__('customer.customer_type')}}</th>
-                        <th>{{__('customer.gender')}}</th>
-                        <th>{{__('customer.nationality')}}</th>
-                        <th>{{__('customer.phone')}}</th>
-                        <th>{{__('customer.id_card_number')}}</th>
-                        @can(['customer-edit'])
-                        <th>{{__('customer.action')}}</th>
-                        @endcan
-                    </tr>
+                    
                 </tfoot>
             </table>
         </div>

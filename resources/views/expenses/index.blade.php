@@ -69,16 +69,7 @@
                       @endforelse
                   </tbody>
                   <tfoot class="table-border-bottom-0">
-                      <tr>
-                        <th>No</th>
-                        <th>{{__('expense.name')}}</th>
-                        <th>{{__('expense.category.title')}}</th>
-                        <th>{{__('expense.amount')}}</th>
-                        <th>{{__('expense.date')}}</th>
-                        @can(['expense-list'],['expense-edit'], ['expense-delete'])
-                        <th>Actions</th>
-                        @endcan
-                      </tr>
+                      
                   </tfoot>
               </table>
               <div class="pagination">

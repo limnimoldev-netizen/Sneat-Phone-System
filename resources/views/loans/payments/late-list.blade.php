@@ -79,20 +79,7 @@
                 </tbody>
                   </tbody>
                   <tfoot class="table-border-bottom-0">
-                      <tr>
-                        <th>#</th>
-                        <th>{{__('loan.no')}}</th>
-                        <th>{{__('loan.customer_name')}}</th>
-                        <th>{{__('loan.amount')}}</th>
-                        <th>{{__('loan.interest')}}</th>
-                        <th>{{__('loan.payable')}}</th>
-                        <th>{{__('loan.remain')}}</th>
-                        <th>{{__('loan.installment')}}</th>
-                        <th>{{__('loan.payment.pay_date')}}</th>
-                          @can(['loan-list'],['loan-edit'], ['loan-delete'],['loan-payment-list'],['loan-payment-create'])
-                          <th>Actions</th>
-                          @endcan
-                      </tr>
+                      
                   </tfoot>
               </table>
               <div class="pagination">

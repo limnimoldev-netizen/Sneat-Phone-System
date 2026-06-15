@@ -65,17 +65,7 @@
 
                 </tbody>
                 <tfoot class="table-border-bottom-0">
-                    <tr>
-                        <th></th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Phone</th>
-                        <th>Branch</th>
-                        <th>Position</th>
-                        @can(['user-edit'])
-                        <th>Actions</th>
-                        @endcan
-                    </tr>
+                    
                 </tfoot>
             </table>
         </div>
