@@ -12,21 +12,23 @@ class CompanySettingController extends Controller
      */
     public function index()
     {
-      $company = CompanySetting::first();
-      return view('company.edit', compact('company'));
+        $company = CompanySetting::first() ?? new CompanySetting(['interest' => 3]);
+
+        return view('company.edit', compact('company'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, CompanySetting $companySetting)
+    public function update(Request $request)
     {
-        $company = CompanySetting::first();
+        $company = CompanySetting::first() ?? new CompanySetting(['interest' => 3]);
         $request->validate([
             'name' => 'required',
             'phone' => 'required',
             'detail' => 'required',
             'address' => 'required',
+            'logo' => ['nullable', 'image', 'mimes:jpg,jpeg,png,gif,webp', 'max:4096'],
         ]);
 
         $data = [
@@ -40,15 +42,12 @@ class CompanySettingController extends Controller
         ];
 
         if ($image = $request->file('logo')) {
-          $destinationPath = 'images/company/';
-          $formattedNumber = str_pad($company->id, 5, '0', STR_PAD_LEFT);
-          $filename = $image->getClientOriginalName();
-          $profileImage = $formattedNumber. "_" .md5($filename . time()) . "." . $image->getClientOriginalExtension();
-          $image->move($destinationPath, $profileImage);
-          $data['logo'] = $profileImage;
+            $profileImage = $image->hashName();
+            $image->move(public_path('images/company'), $profileImage);
+            $data['logo'] = $profileImage;
         }
 
-        $company->update($data);
+        $company->fill($data)->save();
 
         return redirect()->route('company.index', withLang());
     }

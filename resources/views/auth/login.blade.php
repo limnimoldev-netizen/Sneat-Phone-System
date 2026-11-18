@@ -45,20 +45,13 @@
                                 <!-- Register -->
                                 <div class="card">
                                     <div class="card-body">
-                                    <!-- Logo -->
-                                        <div class="app-brand justify-content-center">
-
-                                            <img src="" alt="logo" width="100px"/>
-                                           
-                                        </div>
-                                    <!-- /Logo -->
-                                    <h4 class="mb-2 text-center">{{ $company->name ?? 'Sneat Phone Shop' }}</h4>
+                                    <h4 class="mb-2 text-center">{{ config('app.name') }}</h4>
                                     <p class="mb-4 text-center">Please sign-in to your account.</p>
                                     <form id="formAuthentication" class="mb-3" action="{{ route('login') }}" method="POST">
                                         @csrf
                                         <div class="mb-3">
                                             <label for="name" class="form-label">Login Name</label>
-                                            <input id="name" type="name" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" placeholder="Enter your login name" required autocomplete="name" autofocus>
+                                            <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" placeholder="Enter your login name" required autocomplete="username" autofocus>
 
                                             @error('name')
                                                 <span class="invalid-feedback" role="alert">

@@ -8,7 +8,6 @@ use App\Models\CustomerJob;
 use App\Models\CustomerGuarantor;
 use Spatie\Permission\Models\Role;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\CustomerRequest;
 
@@ -288,24 +287,5 @@ class CustomerController extends Controller
 
         //     return redirect()->back()->with('error', 'Error deleting customer: ' . $e->getMessage());
         // }
-    }
-
-    public function editPassword($id)
-    {
-        $customer = Customer::with('employee')->findOrfail($id);
-        return view('employees.edit-password', [
-          'customer' => $customer
-        ]);
-    }
-
-    public function updatePassword(Request $request, $id)
-    {
-        $request->validate([
-            'new_password' => 'required|confirmed',
-        ]);
-        $customer = Customer::findOrfail($id);
-        $customer->password = Hash::make($request->new_password);
-        $customer->save();
-        return redirect()->route('customers.edit.password', withLang(['id' => $customer->id]))->with('success', 'Password updated successfully');
     }
 }

@@ -59,7 +59,7 @@ class Product extends Model
       'condition',
       'storage_id',
       'type_of_machine',
-      'newtwork',
+      'network_id',
       'battery_percentage',
       'percentage',
       'purchase_price',
@@ -120,7 +120,7 @@ class Product extends Model
     public function getStatusNameAttribute(): string
     {
       $getStatus = self::getStatuses();
-      return $getStatus[$this->status];
+      return $this->status == self::STATUS_ID_LOAN ? self::STATUS_LOAN : $getStatus[$this->status];
     }
 
     public function getConditionLabelBadgesNameAttribute()
@@ -140,7 +140,7 @@ class Product extends Model
       }elseif($this->status == self::STATUS_ID_SOLD){
         return '<span class="badge bg-danger">'.$getStatus[$this->status].'</span>';
       }elseif($this->status == self::STATUS_ID_LOAN){
-        return '<span class="badge bg-secondary">'.$getStatus[$this->status].'</span>';
+        return '<span class="badge bg-secondary">'.self::STATUS_LOAN.'</span>';
       }elseif($this->status == self::STATUS_ID_BROKEN){
         return '<span class="badge bg-warning">'.$getStatus[$this->status].'</span>';
       }

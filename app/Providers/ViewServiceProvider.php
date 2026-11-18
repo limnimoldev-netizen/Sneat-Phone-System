@@ -3,42 +3,32 @@
 namespace App\Providers;
 
 use App\Models\CompanySetting;
-use Illuminate\Support\Facades\Schema;
+use App\Models\Loan;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
-use App\Models\Loan;
-use Carbon\Carbon;
-
+use Illuminate\View\View as Template;
 
 class ViewServiceProvider extends ServiceProvider
 {
-    /**
-     * Register services.
-     *
-     * @return void
-     */
-    public function register()
+    public function boot(): void
     {
-        //
-    }
+        $company = null;
+        View::composer([
+            'components.sidebar', 'loans.create', 'loans.invoice', 'loans.invoice-pdf',
+            'loans.payments.pdf', 'loans.payments.invoice', 'loans.payments.invoice-pdf',
+            'reports.list-loan', 'reports.*-pdf',
+        ], function (Template $view) use (&$company): void {
+            $view->with('company', $company ??= CompanySetting::first() ?? new CompanySetting(['interest' => 3]));
+        });
 
-    /**
-     * Bootstrap services.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        if (Schema::hastable('company_settings')) {
-            $company  = (new CompanySetting())->first();
-            $query = Loan::query()->where('next_payment_date', '<', Carbon::now()->subDays(7)->toDateString());
-            $overdueLoans = $query->take(5)->get();
-            $countOverdueLoans = $query->count();
+        View::composer('components.navbar', function (Template $view): void {
+            $query = Loan::approved()->has('customer')->where('remain', '>', 0)
+                ->where('next_payment_date', '<', now()->subDays(7)->toDateString());
 
-
-            View::composer('*', function ($view) use ($company, $overdueLoans, $countOverdueLoans) {
-                $view->with(['company' => $company, 'overdueLoans' => $overdueLoans, 'countOverdueLoans' => $countOverdueLoans]);
-            });
-        }
+            $view->with([
+                'countOverdueLoans' => $query->count(),
+                'overdueLoans' => $query->with('customer')->orderBy('next_payment_date')->limit(5)->get(),
+            ]);
+        });
     }
 }

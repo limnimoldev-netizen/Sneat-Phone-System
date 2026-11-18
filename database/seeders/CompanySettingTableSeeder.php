@@ -16,7 +16,6 @@ class CompanySettingTableSeeder extends Seeder
       CompanySetting::create([
         'name' => 'Sneat Phone System',
         'detail' => 'មានលក់ទូរស័ព្ទ',
-        'logo' => 'assets/img/favicon/favicon.ico',
         'interest' => '3',
         'phone' => '011 699 952',
         'address' => '#44 PSE Cambodia',

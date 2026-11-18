@@ -44,7 +44,7 @@
                           <td>{{ setToStringDolla($order->total_amount) ?? ''}}</td>
                           <td>{!! $order->payment_status_badges ?? ''!!}</td>
                           <td>{!! $order->payment_type_badges ?? '' !!}</td>
-                          <td>{!! $order->employee_name ?? '' !!}</td>
+                          <td>{{ $order->employee_name }}</td>
                           <td>{!! '<span class="badge bg-label-info">'.setToStringDateFormat($order->order_date).'</span>'!!}</td>
                           <td>
                               @can('order-list')

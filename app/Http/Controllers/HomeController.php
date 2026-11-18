@@ -8,7 +8,6 @@ use App\Models\Order;
 use App\Models\Loan;
 use App\Models\LoanPayment;
 use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
 
 class HomeController extends Controller
 {
@@ -30,7 +29,9 @@ class HomeController extends Controller
      */
     public function __invoke(Request $request)
     {
-        return redirect()->route('dashboard', $request->cookie('locale') ?? app()->getLocale());
+        $locale = $request->cookie('locale', app()->getLocale());
+
+        return redirect()->route('dashboard', in_array($locale, ['kh', 'en'], true) ? $locale : 'en');
     }
 
     /**
@@ -40,13 +41,14 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
-      $currentYear = date('Y');
-      if($request->year){
-        $currentYear = $request->year;
-      }
+      $validated = $request->validate(['year' => ['nullable', 'integer', 'between:1900,9999']]);
+      $currentYear = (int) ($validated['year'] ?? now()->year);
+      $yearExpression = DB::getDriverName() === 'sqlite'
+          ? "CAST(strftime('%Y', order_date) AS INTEGER)"
+          : 'YEAR(order_date)';
 
       $years = DB::table('orders')
-            ->select(DB::raw('YEAR(order_date) as order_year'))
+            ->select(DB::raw("$yearExpression as order_year"))
             ->distinct()
             ->orderBy('order_year', 'desc')
             ->get();
@@ -86,61 +88,34 @@ class HomeController extends Controller
         ]);
     }
 
-    public function setTotalRevenue($currentYear)
+    public function setTotalRevenue(int $currentYear): array
     {
-      $lastYear = $currentYear - 1;
-      $currentYearData = DB::table('orders')
-          ->select(DB::raw('MONTH(order_date) as month'), DB::raw('SUM(total_amount) as total_amount'))
-          ->whereYear('order_date', $currentYear)
-          ->groupBy(DB::raw('MONTH(order_date)'))
-          ->whereNull('deleted_at')
-          ->get();
+        return [
+            'monthlyDifference' => $this->annualRevenue($currentYear),
+            'monthlyDifferenceLastYear' => $this->annualRevenue($currentYear - 1),
+        ];
+    }
 
-      $lastYearData = DB::table('orders')
-          ->select(DB::raw('MONTH(order_date) as month'), DB::raw('SUM(total_amount) as total_amount'))
-          ->whereYear('order_date', $lastYear)
-          ->groupBy(DB::raw('MONTH(order_date)'))
-          ->whereNull('deleted_at')
-          ->get();
+    private function annualRevenue(int $year): array
+    {
+        $sqlite = DB::getDriverName() === 'sqlite';
+        $orderMonth = $sqlite ? "CAST(strftime('%m', order_date) AS INTEGER)" : 'MONTH(order_date)';
+        $paymentMonth = $sqlite ? "CAST(strftime('%m', date) AS INTEGER)" : 'MONTH(date)';
 
-      $currentYearLoanPayments = DB::table('loan_payments')
-          ->select(DB::raw('MONTH(date) as month'), DB::raw('SUM(amount) as total_amount'))
-          ->whereYear('date', $currentYear)
-          ->groupBy(DB::raw('MONTH(date)'))
-          ->get();
+        $orders = Order::whereYear('order_date', $year)
+            ->selectRaw("$orderMonth as month, SUM(total_amount) as total")
+            ->groupByRaw($orderMonth)
+            ->pluck('total', 'month');
+        $payments = DB::table('loan_payments')->whereYear('date', $year)
+            ->selectRaw("$paymentMonth as month, SUM(amount) as total")
+            ->groupByRaw($paymentMonth)
+            ->pluck('total', 'month');
 
-      $lastYearLoanPayments = DB::table('loan_payments')
-          ->select(DB::raw('MONTH(date) as month'), DB::raw('SUM(amount) as total_amount'))
-          ->whereYear('date', $lastYear)
-          ->groupBy(DB::raw('MONTH(date)'))
-          ->get();
+        $monthlyRevenue = [];
+        for ($month = 1; $month <= 12; $month++) {
+            $monthlyRevenue[] = round(($orders[$month] ?? 0) + ($payments[$month] ?? 0), 2);
+        }
 
-        $currentYearData = $currentYearData->pluck('total_amount', 'month')->toArray();
-        $lastYearData = $lastYearData->pluck('total_amount', 'month')->toArray();
-        $currentYearLoanPayments = $currentYearLoanPayments->pluck('total_amount', 'month')->toArray();
-        $lastYearLoanPayments = $lastYearLoanPayments->pluck('total_amount', 'month')->toArray();
-
-        $dataCurrentYear = ['name' => $currentYear ,'data' => [], 'total' => 0];
-        $dataLastYear = ['name' => $lastYear ,'data' => [], 'total' => 0];
-
-        for ($i = 1; $i <= 12; $i++) {
-          $setCurrentYearLoanPayment = 0;
-          $setcurrentYearData = 0;
-          if(isset($currentYearLoanPayments[$i])){
-            $setCurrentYearLoanPayment = number_format(round($currentYearLoanPayments[$i], 2), 2, '.', '');
-          }
-          if(isset($currentYearData[$i])){
-            $setcurrentYearData = number_format(round($currentYearData[$i], 2), 2, '.', '');
-          }
-
-          $dataCurrentYear['data'][] = ($setcurrentYearData ?? 0) + ($setCurrentYearLoanPayment ?? 0);
-          $dataCurrentYear['total'] += ($currentYearData[$i] ?? 0) + ($setCurrentYearLoanPayment ?? 0);
-      }
-
-      for ($i = 1; $i <= 12; $i++) {
-          $dataLastYear['data'][] = ($lastYearData[$i] ?? 0) + ($lastYearLoanPayments[$i] ?? 0);
-          $dataLastYear['total'] += ($lastYearData[$i] ?? 0) + ($lastYearLoanPayments[$i] ?? 0);
-      }
-      return array('monthlyDifference' => $dataCurrentYear, 'monthlyDifferenceLastYear' => $dataLastYear);
+        return ['name' => $year, 'data' => $monthlyRevenue, 'total' => array_sum($monthlyRevenue)];
     }
 }

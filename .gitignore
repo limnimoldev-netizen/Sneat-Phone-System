@@ -1,5 +1,6 @@
 /node_modules
 /public/hot
+/public/build/assets/*.js
 /public/storage
 /public/js
 /public/css
@@ -17,8 +18,6 @@
 /storage/logs/*
 /storage/*
 !/storage/.gitkeep
-composer.lock
-package-lock.json
 /vendor/
 .env
 .env.backup

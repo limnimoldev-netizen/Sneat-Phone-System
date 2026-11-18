@@ -10,7 +10,6 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\ExpenseController;
-use App\Http\Controllers\ExpenseCategoryController;
 use App\Http\Controllers\LoanController;
 use App\Http\Controllers\LoanPaymentController;
 use App\Http\Controllers\ReportController;
@@ -114,8 +113,6 @@ Route::group([
         Route::get('/create', [OrderController::class, 'createSale'])->name('create');
         Route::post('/store', [OrderController::class, 'store'])->name('store');
         Route::get('/show/{id}', [OrderController::class, 'showSale'])->name('show');
-        Route::get('/edit/{id}', [OrderController::class, 'editSale'])->name('edit');
-        Route::put('/update/{id}', [OrderController::class, 'updateSale'])->name('update');
         Route::delete('/destroy/{id}', [OrderController::class, 'destroy'])->name('destroy');
     }); 
 
@@ -133,13 +130,6 @@ Route::group([
       Route::get('{expense}/edit', [ExpenseController::class, 'edit'])->name('edit');
       Route::patch('/{expense}', [ExpenseController::class, 'update'])->name('update');
       Route::delete('/{expense}', [ExpenseController::class, 'destroy'])->name('destroy');
-      Route::group(['prefix'=>'category','as'=>'categories.'], function(){
-        Route::get('/', [ExpenseCategoryController::class, 'index'])->name('index');
-        Route::get('/create', [ExpenseCategoryController::class, 'create'])->name('create');
-        Route::post('/store', [ExpenseCategoryController::class, 'store'])->name('store');
-        Route::get('/edit/{sale}', [ExpenseCategoryController::class, 'edit'])->name('edit');
-        Route::post('/update/{sale}', [ExpenseCategoryController::class, 'update'])->name('update');
-      });
     });
 
     Route::group(['prefix'=>'model-type','as'=>'model_type.'], function(){
@@ -204,7 +194,6 @@ Route::group([
         Route::get('/{loanPayment}/invoice', [LoanPaymentController::class, 'invoice'])->name('invoice');
         Route::get('/{loanPayment}/invoice/pdf', [LoanPaymentController::class, 'invoicePdf'])->name('invoice.pdf');
         Route::put('/{loanPayment}', [LoanPaymentController::class, 'update'])->name('update');
-        Route::delete('/{loanPayment}', [LoanPaymentController::class, 'destroy'])->name('destroy');
         Route::get('{loan}/list', [LoanController::class, 'list'])->name('list');
         Route::get('/{loan}/pdf', [LoanController::class,'pdf'])->name('pdf');
         Route::get('/late', [LoanPaymentController::class, 'late'])->name('late');
@@ -218,12 +207,6 @@ Route::group([
       Route::post('/store', [CustomerController::class, 'store'])->name('store');
       Route::post('/update/{id}', [CustomerController::class, 'update'])->name('update');
       Route::delete('/destroy/{id}', [CustomerController::class, 'destroy'])->name('destroy');
-      Route::get('/password/edit/{id}', [CustomerController::class, 'editPassword'])->name('edit.password');
-      Route::post('/password/update/{id}', [CustomerController::class, 'updatePassword'])->name('update.password');
-      Route::get('/profile', [CustomerController::class, 'edit'])->name('edit.profile');
-      Route::post('/profile/update', [CustomerController::class, 'update'])->name('update.profile');
-      Route::get('/profile/edit/password', [CustomerController::class, 'editPassword'])->name('edit.profile.password');
-      Route::post('/profile/update/password', [CustomerController::class, 'updatePassword'])->name('update.profile.password');
 
       Route::group(['prefix'=>'gurantor', 'as'=>'gurantors.'], function(){
         Route::get('/', [GurantorController::class, 'index'])->name('index');
@@ -231,7 +214,7 @@ Route::group([
   });
     Route::get('series/brand/{id}', [ProductController::class, 'getSeriesBybrand'])->name('get-series');
     Route::get('products/check/{id}', [ProductController::class, 'getProductById'])->name('get-product-by-id');
-    Route::get('company/', [CompanySettingController::class, 'index'])->name('company.index');
-    Route::put('company/', [CompanySettingController::class, 'update'])->name('company.update');
+    Route::get('company/', [CompanySettingController::class, 'index'])->middleware('permission:company-setting-edit')->name('company.index');
+    Route::put('company/', [CompanySettingController::class, 'update'])->middleware('permission:company-setting-edit')->name('company.update');
 });
 

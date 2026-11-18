@@ -51,7 +51,7 @@
                 </p>
                 <p class="mb-0">
                     <span class="text-muted">Order Date:</span> 
-                    <strong class="text-dark">{{ $sale->created_at->format('d/m/Y') }}</strong>
+                    <strong class="text-dark">{{ $sale->order_date_dmy }}</strong>
                 </p>
             </div>
         </div>
@@ -93,21 +93,21 @@
                     @forelse($sale->orderDetails as $detail)
                         <tr>
                             <td class="fw-semibold text-dark py-3">
-                                {{ $detail->product->name }}
+                                {{ $detail->product->product_name ?? 'Unavailable product' }}
                             </td>
                             <td>
                                 <span class="badge bg-label-secondary font-monospace">
-                                    IMEI: {{ $detail->imei ?? 'N/A' }}
+                                    IMEI: {{ $detail->product->product_imei ?? 'N/A' }}
                                 </span>
                             </td>
                             <td class="text-end">
-                                ${{ number_format($detail->price, 2) }}
+                                ${{ number_format($detail->unit_price, 2) }}
                             </td>
                             <td class="text-center fw-semibold">
-                                {{ $detail->quantity }}
+                                1
                             </td>
                             <td class="text-end fw-bold text-dark">
-                                ${{ number_format($detail->price * $detail->quantity, 2) }}
+                                ${{ number_format($detail->unit_price, 2) }}
                             </td>
                         </tr>
                     @empty
@@ -124,7 +124,7 @@
             <div class="col-sm-6 mb-3 mb-sm-0 text-center text-sm-start">
                 <div class="border-top d-inline-block pt-2" style="width: 150px;">
                     <p class="text-muted small mb-0">Authorized Seller</p>
-                    <strong class="text-dark">The Seller</strong>
+                    <strong class="text-dark">{{ $sale->employee_name }}</strong>
                 </div>
             </div>
 

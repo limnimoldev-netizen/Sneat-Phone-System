@@ -25,6 +25,6 @@ class CompanySetting extends Model
       if($this->logo && $this->logo != null && $this->logo != ''){
         return asset('/images/company/'.$this->logo);
       }
-      return asset('/assets/img/logo.png');
+      return asset('/assets/img/favicon/favicon.ico');
     }
 }

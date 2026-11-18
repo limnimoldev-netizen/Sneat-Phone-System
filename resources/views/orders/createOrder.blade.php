@@ -28,6 +28,15 @@
 
 <form id="posOrderForm" action="{{ route('sales.store', app()->getLocale()) }}" method="POST">
     @csrf
+    @if ($errors->any())
+        <div class="alert alert-danger" role="alert">
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
     
     <input type="hidden" name="products" id="hiddenProductsInput">
     <input type="hidden" name="order_date" value="{{ date('Y-m-d H:i:s') }}">
@@ -154,6 +163,7 @@
 </form>
 @endsection
 
+@push('script')
 <script>
 
 // Wait until the whole HTML page is loaded
@@ -204,7 +214,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     <div style="max-width: 80%;">
                         <h6 class="mb-0 text-dark fw-semibold" style="font-size: 12px;">
-                            ${item.name}
                         </h6>
 
                         <small class="text-primary fw-bold">
@@ -224,12 +233,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 </div>
             `;
         }).join('');
+        cart.forEach((item, index) => {
+            container.children[index].querySelector('h6').textContent = item.name;
+        });
 
         // Show total amount
         document.getElementById('orderTotal').textContent = total.toFixed(2);
 
         // Convert cart array to JSON and send to Laravel
-        document.getElementById('hiddenProductsInput').value = JSON.stringify(cart);
+        document.getElementById('hiddenProductsInput').value = JSON.stringify(cart.map(({ id }) => ({ id })));
     }
 
     // FUNCTION: Add Product
@@ -341,3 +353,4 @@ document.addEventListener('DOMContentLoaded', function () {
 
 });
 </script>
+@endpush

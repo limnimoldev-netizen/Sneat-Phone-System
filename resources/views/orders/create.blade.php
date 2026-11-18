@@ -1,26 +1,25 @@
 @extends('layouts.app')
 @push('styles')
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 @endpush
 
 @section('content')
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register Sale</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</head>
-<body class="bg-[#f8f9fa] min-h-screen font-sans">
-
     <div class=" bg-white rounded-lg shadow-sm border border-gray-100 p-6 m-6">
         <h2 class="text-xl font-medium text-gray-500 mb-6">Register Sale</h2>
 
         <!-- <form id="saleForm" onsubmit="handleSubmit(event)"> -->     
         <form id="saleForm" action="{{ route('sales.store', ['lang' => app()->getLocale()]) }}" method="POST" onsubmit="handleSubmit(event)">
         @csrf
+    @if ($errors->any())
+        <div class="alert alert-danger" role="alert">
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <div>
@@ -28,7 +27,7 @@
                     <div class="relative">
 
                     <!-- add by nimol -->
-                        <input type="date" name="order_date" required class="w-full border border-gray-200 rounded px-3 py-2 text-gray-700 focus:outline-none focus:border-indigo-500 bg-white">  
+                        <input type="date" name="order_date" value="{{ old('order_date') }}" required class="w-full border border-gray-200 rounded px-3 py-2 text-gray-700 focus:outline-none focus:border-indigo-500 bg-white">
 
                     </div>
                 </div>
@@ -44,7 +43,7 @@
                     <select name="customer_id" class="w-full border border-gray-200 rounded px-3 py-2 text-gray-700 focus:outline-none focus:border-indigo-500 bg-white">
                         <option value="">Walk in Customer</option>
                         @foreach($customers as $customer)
-                            <option value="{{ $customer->id }}">{{ $customer->name }}</option>
+                            <option value="{{ $customer->id }}" @selected(old('customer_id') == $customer->id)>{{ $customer->name }}</option>
                         @endforeach
                     </select>
 
@@ -136,7 +135,10 @@
         </form>
     </div>
 
-    <script >
+@endsection
+
+@push('script')
+    <script>
         let items = [];
 
 function addProduct(selectElement) {
@@ -153,7 +155,7 @@ function addProduct(selectElement) {
     const price = parseFloat(selectedOption.getAttribute('data-price'));
 
     // Add item to array (storing 'optionValue' inside the item object)
-    items.push({ id: Date.now(), optionValue, imei, name, detail, price });
+    items.push({ id: Number(optionValue), optionValue, imei, name, detail, price });
     
     // Hide and disable the chosen option from the dropdown instantly
     selectedOption.hidden = true;
@@ -208,9 +210,9 @@ function renderTable() {
         const row = document.createElement('tr');
         row.className = "border-b border-gray-100 hover:bg-gray-50/50 transition-colors text-sm text-gray-600";
         row.innerHTML = `
-            <td class="p-3 font-medium">${item.imei}</td>
-            <td class="p-3">${item.name}</td>
-            <td class="p-3 text-gray-400">${item.detail}</td>
+            <td class="p-3 font-medium"></td>
+            <td class="p-3"></td>
+            <td class="p-3 text-gray-400"></td>
             <td class="p-3 font-medium">${item.price.toFixed(2)}</td>
             <td class="p-3 text-center">
                 <button type="button" onclick="removeItem(${item.id})" class="text-red-500 hover:text-red-700 p-1">
@@ -218,6 +220,9 @@ function renderTable() {
                 </button>
             </td>
         `;
+        row.cells[0].textContent = item.imei;
+        row.cells[1].textContent = item.name;
+        row.cells[2].textContent = item.detail;
         tbody.appendChild(row);
     });
 
@@ -261,7 +266,7 @@ function resetForm() {
 
         // Pass selected products to hidden input
         document.getElementById('productsInput').value = JSON.stringify(
-            items.map(i => ({ id: i.optionValue, price: i.price }))
+            items.map(i => ({ id: i.optionValue }))
         );
 
         // Submit the form to Laravel
@@ -270,8 +275,4 @@ function resetForm() {
 
 
     </script>
-</body>
-</html>
-
-
-@endsection
+@endpush

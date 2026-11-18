@@ -4,27 +4,22 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\Product;
-use App\Models\Brand;
-use App\Models\Series;
-use App\Models\Color;
-use App\Models\ModelType;
-use App\Models\Storage;
 use App\Models\Customer;
-use App\Models\Cart;
 use App\Models\OrderDetail;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 use Carbon\Carbon;
-use Barryvdh\DomPDF\Facade\Pdf;
 
 class OrderController extends Controller
 {
   function __construct()
   {
       $this->middleware('auth');
-      $this->middleware('permission:order-list|order-create|order-edit|order-delete', ['only' => ['index','store']]);
-      $this->middleware('permission:order-create', ['only' => ['create','store']]);
-      $this->middleware('permission:order-edit', ['only' => ['edit','update']]);
+      $this->middleware('permission:order-list|order-create|order-edit|order-delete', ['only' => ['index', 'showSale']]);
+      $this->middleware('permission:order-create', ['only' => ['createOrder', 'createSale', 'store']]);
       $this->middleware('permission:order-delete', ['only' => ['destroy']]);
   }
   /**
@@ -32,12 +27,8 @@ class OrderController extends Controller
    */
   public function index(Request $request)
   {
-    // code add
-    $query = Order::query();  
-
     $parameterNames = [];
     $query = Order::query();
-        $customers = Customer::all();
     if ($request->search) {
         $filters = $request->only(['customer', 'from_date', 'to_date']);
         
@@ -63,7 +54,7 @@ class OrderController extends Controller
         }
     }
 
-    $orders = $query->orderBy('order_date', 'desc')->paginate(20);
+    $orders = $query->with(['customer', 'employee'])->orderBy('order_date', 'desc')->paginate(20);
     session(['printInvoiceId' => null]);
 
     // code add
@@ -80,7 +71,7 @@ class OrderController extends Controller
    // add function by nimol add sale
     public function createOrder(Request $request)
     {
-        $query = Product::query();
+        $query = Product::available()->whereNotNull('selling_price');
 
         // If a brand button is clicked, filter products
         if ($request->has('brand') && $request->brand != 'all') {
@@ -99,7 +90,7 @@ class OrderController extends Controller
     public function createSale(Request $request)
     {
 
-    $query = Product::query();
+    $query = Product::available()->whereNotNull('selling_price');
 
         // If a brand button is clicked, filter products
         if ($request->has('brand') && $request->brand != 'all') {
@@ -117,44 +108,69 @@ class OrderController extends Controller
     // Save the order to database
     public function store(Request $request)
     {
-        $customer_id  = $request->input('customer_id');
-        $order_date   = $request->input('order_date');
-        $note         = $request->input('note');
-        
-        $products     = json_decode($request->input('products'), true) ?: []; 
-        $total        = collect($products)->sum('price');
-
-       
-        $order = Order::create([
-            'customer_id'    => $customer_id ?: 1,
-            'employee_id'    => auth()->id(),
-            'total_amount'   => $total,
-            'order_date'     => $request->input('order_date'),
-            'note'           => $request->input('note'),
-            'payment_status' => $request->input('payment_status') ?: 0, 
-            'payment_type' => $request->input('payment_type') ?: 1,
-            'status'         => $request->input('status') ?: 0,
+        $data = $request->validate([
+            'customer_id' => ['nullable', 'integer', Rule::exists('customers', 'id')->whereNull('deleted_at')],
+            'order_date' => ['required', 'date'],
+            'note' => ['nullable', 'string'],
+            'products' => ['required', 'json'],
+            'payment_type' => ['nullable', Rule::in([Order::PAYMENT_TYPE_CASH, Order::PAYMENT_TYPE_BANK, Order::PAYMENT_TYPE_OTHER])],
+            'payment_status' => ['nullable', Rule::in([Order::PAYMENT_STATUS_PAID, Order::PAYMENT_STATUS_UNPAID])],
+            'status' => ['nullable', Rule::in([Order::STATUS_ACTIVE, Order::STATUS_INACTIVE])],
         ]);
+        $items = Validator::make(['products' => json_decode($data['products'], true)], [
+            'products' => ['required', 'array', 'min:1'],
+            'products.*.id' => ['required', 'integer', 'min:1', 'distinct'],
+        ])->validate()['products'];
 
-        // Save each product as order item
-        foreach ($products as $item) {
-            OrderDetail::create([
-                'order_id'   => $order->id,
-                'product_id' => $item['id'],
-                'unit_price' => $item['price'] ?? 0,
-                'price'      => $item['price'] ,
+        $employee = $request->user()->employee;
+        $customerId = $data['customer_id'] ?? Customer::where('name', 'Walk in Customer')
+            ->where('phone', '000000000')->value('id');
+
+        if (!$employee || !$customerId) {
+            throw ValidationException::withMessages([
+                'customer_id' => !$employee ? 'Your account needs an employee profile to record a sale.' : 'Select a customer.',
             ]);
         }
 
-        return redirect()->route('sales.index', app()->getLocale())->with('success', 'Order saved!');
+        DB::transaction(function () use ($data, $items, $employee, $customerId): void {
+            $products = Product::available()->whereKey(array_column($items, 'id'))
+                ->orderBy('id')->lockForUpdate()->get();
 
+            if ($products->count() !== count($items) || $products->contains(
+                fn (Product $product) => !is_numeric($product->selling_price) || $product->selling_price < 0
+            )) {
+                throw ValidationException::withMessages(['products' => 'Select available products with a valid selling price.']);
+            }
 
+            $order = Order::create([
+                'customer_id' => $customerId,
+                'employee_id' => $employee->id,
+                'total_amount' => number_format($products->sum(
+                    fn (Product $product) => (int) round($product->selling_price * 100)
+                ) / 100, 2, '.', ''),
+                'order_date' => Carbon::parse($data['order_date'])->toDateTimeString(),
+                'note' => $data['note'] ?? null,
+                'payment_status' => $data['payment_status'] ?? Order::PAYMENT_STATUS_PAID,
+                'payment_type' => $data['payment_type'] ?? Order::PAYMENT_TYPE_CASH,
+                'status' => $data['status'] ?? Order::STATUS_ACTIVE,
+            ]);
+
+            foreach ($products as $product) {
+                $order->orderDetails()->create([
+                    'product_id' => $product->id,
+                    'unit_price' => number_format((float) $product->selling_price, 2, '.', ''),
+                ]);
+                $product->update(['status' => Product::STATUS_ID_SOLD]);
+            }
+        }, 3);
+
+        return redirect()->route('sales.index', withLang())->with('success', 'Order saved!');
     }
 
     // add by nimol
     public function showSale($lang, $id)
     {
-        $sale = Order::findOrFail($id);
+        $sale = Order::with(['orderDetails.product', 'customer', 'employee'])->findOrFail($id);
         return view('orders.showSale', compact('id', 'sale'));
     }
     
@@ -189,8 +205,18 @@ class OrderController extends Controller
 
     public function destroy(string $lang, string $id)
     {
-        $order = Order::findOrFail($id);
-        $order->delete();
+        DB::transaction(function () use ($id): void {
+            $order = Order::lockForUpdate()->findOrFail($id);
+            $products = Product::sold()->whereKey($order->orderDetails()->pluck('product_id')->all())
+                ->orderBy('id')->lockForUpdate()->get();
+            $order->delete();
+
+            foreach ($products as $product) {
+                if (!OrderDetail::where('product_id', $product->id)->whereHas('order')->exists()) {
+                    $product->update(['status' => Product::STATUS_ID_AVAILABLE]);
+                }
+            }
+        }, 3);
 
       return redirect()->route('sales.index', withLang())->with('success', 'Sale deleted successfully');
     }

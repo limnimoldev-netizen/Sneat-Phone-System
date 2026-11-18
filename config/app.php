@@ -83,8 +83,6 @@ return [
     |
     */
 
-    'locale' => 'kh',
-
     /*
     |--------------------------------------------------------------------------
     | Application Fallback Locale
@@ -110,6 +108,8 @@ return [
     */
 
     'fallback_locale' => env('APP_FALLBACK_LOCALE', 'en'),
+
+    'seed_admin_password' => env('SEED_ADMIN_PASSWORD'),
 
      /*
     |--------------------------------------------------------------------------
